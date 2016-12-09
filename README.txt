@@ -1,0 +1,1 @@
+This project will implement a simple version of Paxos in CSharp
