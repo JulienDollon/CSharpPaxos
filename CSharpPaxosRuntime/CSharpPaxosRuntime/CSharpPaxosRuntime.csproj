@@ -40,10 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Log\ILogger.cs" />
-    <Compile Include="Log\DebugModeLogger.cs" />
-    <Compile Include="Log\LoggerSingleton.cs" />
-    <Compile Include="Log\Severity.cs" />
+    <Compile Include="Utils\Log\ILogger.cs" />
+    <Compile Include="Utils\Log\DebugModeLogger.cs" />
+    <Compile Include="Utils\Log\LoggerSingleton.cs" />
+    <Compile Include="Utils\Log\Severity.cs" />
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Messaging\IMessageReceiver.cs" />
     <Compile Include="Messaging\IMessageSender.cs" />

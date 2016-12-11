@@ -1,3 +1,12 @@
+CSharpPaxosRuntime/.vs
+CSharpPaxosRuntime/CSharpPaxosRuntime.Networking/bin/
+CSharpPaxosRuntime/CSharpPaxosRuntime.Networking/obj/
+CSharpPaxosRuntime/CSharpPaxosRuntime.Tests/bin/
+CSharpPaxosRuntime/CSharpPaxosRuntime.Tests/obj/
+CSharpPaxosRuntime/CSharpPaxosRuntime/obj/
+CSharpPaxosRuntime/CSharpPaxosRuntime/bin/
+
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db

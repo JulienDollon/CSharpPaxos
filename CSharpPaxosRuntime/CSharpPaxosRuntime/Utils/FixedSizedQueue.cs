@@ -10,7 +10,6 @@ namespace CSharpPaxosRuntime.Utils
 {
     public class FixedSizedQueue<T>
     {
-        private readonly object privateLockObject = new object();
         readonly ConcurrentQueue<T> queue = new ConcurrentQueue<T>();
         private int max_size;
         public FixedSizedQueue(int max_size = 5000000)
@@ -20,25 +19,20 @@ namespace CSharpPaxosRuntime.Utils
 
         public T Dequeue()
         {
-            lock (this.privateLockObject)
-            {
-                T outObj;
-                queue.TryDequeue(out outObj);
-                return outObj;
-            }
+            T outObj;
+            queue.TryDequeue(out outObj);
+            return outObj;
         }
 
         public void Enqueue(T obj)
         {
             this.queue.Enqueue(obj);
-            lock (this.privateLockObject)
+
+            while (this.queue.Count > this.max_size)
             {
-                while (this.queue.Count > this.max_size)
-                {
-                    T outObj;
-                    queue.TryDequeue(out outObj);
-                    LoggerSingleton.Instance.Log(Severity.Info, "Messages lost, max size of the queue reached");
-                }
+                T outObj;
+                queue.TryDequeue(out outObj);
+                LoggerSingleton.Instance.Log(Severity.Info, "Messages lost, max size of the queue reached");
             }
         }
     }
