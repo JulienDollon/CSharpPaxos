@@ -1,101 +1,84 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CSharpPaxosRuntime.Log;
 using CSharpPaxosRuntime.Messaging;
-using CSharpPaxosRuntime.Log;
-using CSharpPaxosRuntime.Utils;
+using CSharpPaxosRuntime.Messaging.Bus;
 using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
-using CSharpPaxosRuntime.RolesStrategies;
+using CSharpPaxosRuntime.Messaging.Properties;
 using CSharpPaxosRuntime.Roles.RolesStrategies;
 
 namespace CSharpPaxosRuntime.Roles
 {
     public class Acceptor : IPaxosActor
     {
-        const int defaultBallotNumber = 0;
+        private const int defaultBallotNumber = 0;
 
-        private ILogger logger;
-        private IMessageReceiver messageReceiver;
-        private IMessageBroker messageBroker;
-        private IPaxosActorLoopMessageListener loopListener;
-        private AcceptorState currentAcceptorState;
-        private StrategyContainer strategyContainer;
+        private readonly ILogger _logger;
+        private readonly IPaxosActorLoopMessageListener _loopListener;
+        private readonly IMessageBroker _messageBroker;
+        private AcceptorState _currentAcceptorState;
+        private StrategyContainer _strategyContainer;
 
-        public Acceptor(ILogger logger, 
-                        IMessageReceiver receiver, 
-                        IPaxosActorLoopMessageListener loopListener,
-                        IMessageBroker messageBroker)
+        public Acceptor(ILogger logger,
+            IMessageReceiver receiver,
+            IPaxosActorLoopMessageListener loopListener,
+            IMessageBroker messageBroker)
         {
-            this.logger = logger;
-            this.messageReceiver = receiver;
-            this.loopListener = loopListener;
-            this.messageBroker = messageBroker;
+            _logger = logger;
+            MessageReceiver = receiver;
+            _loopListener = loopListener;
+            _messageBroker = messageBroker;
 
-            this.initializeState();
-            this.initializeLoopListener();
-            this.initializeMessageStrategies();
-        }
-
-        private void initializeLoopListener()
-        {
-            this.loopListener.Initialize(this.MessageReceiver,
-                                         this.onMessageDequeued,
-                                         this.messageBroker,
-                                         this.currentAcceptorState.MessageSender);
-        }
-
-        private void initializeState()
-        {
-            this.currentAcceptorState = new AcceptorState();
-            this.currentAcceptorState.MessageSender = new MessageSender()
-                {
-                    UniqueId = this.GetHashCode().ToString()
-                };
-
-            this.currentAcceptorState.BallotNumber = defaultBallotNumber;
-        }
-
-        private void initializeMessageStrategies()
-        {
-            this.strategyContainer = new StrategyContainer();
-            this.strategyContainer.AddStrategy(typeof(SolicitateBallotRequest), 
-                new SolicitateBallotRequestMessageStrategy(this.messageBroker));
-
-            this.strategyContainer.AddStrategy(typeof(VoteRequest),
-                new VoteRequestMessageStrategy(this.messageBroker));
+            InitializeState();
+            InitializeLoopListener();
+            InitializeMessageStrategies();
         }
 
         public void Start()
         {
-            loopListener.Execute();
+            _loopListener.Execute();
         }
 
         public void Stop()
         {
-            loopListener.KeepRunning = false;
+            _loopListener.KeepRunning = false;
         }
 
-        private void onMessageDequeued(IMessage lastMessage)
+        public IMessageReceiver MessageReceiver { get; }
+
+        public IPaxosActorState ActorState => _currentAcceptorState;
+
+        private void InitializeLoopListener()
         {
-            this.strategyContainer.ExecuteStrategy(lastMessage, this.currentAcceptorState);
+            _loopListener.Initialize(MessageReceiver,
+                OnMessageDequeued,
+                _messageBroker,
+                _currentAcceptorState.MessageSender);
         }
 
-        public IMessageReceiver MessageReceiver
+        private void InitializeState()
         {
-            get
+            _currentAcceptorState = new AcceptorState
             {
-                return this.messageReceiver;
-            }
+                MessageSender = new MessageSender
+                {
+                    UniqueId = GetHashCode().ToString()
+                },
+                BallotNumber = defaultBallotNumber
+            };
         }
 
-        public IPaxosActorState ActorState
+        private void InitializeMessageStrategies()
         {
-            get
-            {
-                return currentAcceptorState;
-            }
+            _strategyContainer = new StrategyContainer();
+            _strategyContainer.AddStrategy(typeof(SolicitateBallotRequest),
+                new SolicitateBallotRequestMessageStrategy(_messageBroker));
+
+            _strategyContainer.AddStrategy(typeof(VoteRequest),
+                new VoteRequestMessageStrategy(_messageBroker));
+        }
+
+        private void OnMessageDequeued(IMessage lastMessage)
+        {
+            _strategyContainer.ExecuteStrategy(lastMessage, _currentAcceptorState);
         }
     }
 }

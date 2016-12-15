@@ -1,10 +1,5 @@
-﻿using CSharpPaxosRuntime.Messaging;
+﻿using CSharpPaxosRuntime.Messaging.Properties;
 using CSharpPaxosRuntime.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CSharpPaxosRuntime.Roles
 {
@@ -12,7 +7,7 @@ namespace CSharpPaxosRuntime.Roles
     {
         public AcceptorState()
         {
-            this.AcceptedDecisions = new VoteDecisions();
+            AcceptedDecisions = new VoteDecisions();
         }
 
         public int BallotNumber { get; set; }

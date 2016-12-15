@@ -1,4 +1,4 @@
-﻿namespace CSharpPaxosRuntime.Messaging
+﻿namespace CSharpPaxosRuntime.Messaging.Bus
 {
     public interface IMessageBroker
     {

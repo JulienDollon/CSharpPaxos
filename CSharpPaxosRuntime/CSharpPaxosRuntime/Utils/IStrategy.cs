@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CSharpPaxosRuntime.Utils
+﻿namespace CSharpPaxosRuntime.Utils
 {
     public interface IStrategy
     {
         void Execute();
     }
 
-    public interface IStrategy<T>
+    public interface IStrategy<in T>
     {
         void Execute(T obj);
     }
