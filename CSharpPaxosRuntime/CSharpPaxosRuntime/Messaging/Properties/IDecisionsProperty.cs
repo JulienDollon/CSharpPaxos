@@ -9,6 +9,6 @@ namespace CSharpPaxosRuntime.Messaging.Properties
 {
     public interface IDecisionsProperty
     {
-        Decisions Decisions { get; set; }
+        VoteDecisions Decisions { get; set; }
     }
 }

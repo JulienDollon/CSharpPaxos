@@ -49,59 +49,45 @@ namespace CSharpPaxosRuntime.Tests
         }
 
         [TestMethod]
-        public void Test_WithValidBallot_SolicitateBallotRequest()
+        public void Test_WithValidBallot_VoteRequest()
         {
-            int ballotNumber = 1;
-            Acceptor acceptor = getAcceptorWithNoMocks();
-            MessageReceiver testReceiver = new MessageReceiver();
-            subscribeToBroker(testReceiver);
-
-            Task t = Task.Run(() => {
-                acceptor.Start();
-            });
-
-            IMessage request = generateSolicitateBallotRequest(ballotNumber);
-            messageBroker.SendMessage(acceptor.ActorState.MessageSender.UniqueId, request);
-            Thread.Sleep(50);
-
-            SolicitateBallotResponse response = testReceiver.GetLastMessage() as SolicitateBallotResponse;
-
-            Assert.IsNotNull(response);
-            Assert.AreEqual(response.BallotNumber, ballotNumber);
-            Assert.AreEqual(response.MessageSender.UniqueId, acceptor.ActorState.MessageSender.UniqueId);
-            Assert.AreEqual((acceptor.ActorState as AcceptorState).BallotNumber, ballotNumber);
-
-            acceptor.Stop();
-            cleanBrokerSubscription();
+            int ballotNumber = 0;
+            int slotNumber = 10;
+            int expectedBallotNumber = 0;
+            testVoteRequest(ballotNumber, slotNumber, expectedBallotNumber);
         }
 
         [TestMethod]
-        public void Test_WithUnValidBallot_SolicitateBallotRequest()
+        public void Test_WithInValidBallot_VoteRequest()
+        {
+            int ballotNumber = -1;
+            int slotNumber = 10;
+            int expectedBallotNumber = 0;
+            testVoteRequest(ballotNumber, slotNumber, expectedBallotNumber);
+        }
+
+        private VoteRequest generateVoteRequest(int ballotNumber, int slotNumber)
+        {
+            VoteRequest vote = new VoteRequest();
+            vote.BallotNumber = ballotNumber;
+            vote.MessageSender = new MessageSender() { UniqueId = this.GetHashCode().ToString() };
+            vote.SlotNumber = slotNumber;
+            return vote;
+        }
+
+        [TestMethod]
+        public void Test_WithValidBallot_SolicitateBallotRequest()
+        {
+            int ballotNumber = 1;
+            testSolicitateBallotRequest(ballotNumber, ballotNumber);
+        }
+
+        [TestMethod]
+        public void Test_WithInValidBallot_SolicitateBallotRequest()
         {
             int ballotNumber = -1;
             int defaultBallot = 0;
-
-            Acceptor acceptor = getAcceptorWithNoMocks();
-            MessageReceiver testReceiver = new MessageReceiver();
-            subscribeToBroker(testReceiver);
-
-            Task t = Task.Run(() => {
-                acceptor.Start();
-            });
-
-            IMessage request = generateSolicitateBallotRequest(ballotNumber);
-            messageBroker.SendMessage(acceptor.ActorState.MessageSender.UniqueId, request);
-            Thread.Sleep(50);
-
-            SolicitateBallotResponse response = testReceiver.GetLastMessage() as SolicitateBallotResponse;
-
-            Assert.IsNotNull(response);
-            Assert.AreEqual(response.BallotNumber, defaultBallot);
-            Assert.AreEqual(response.MessageSender.UniqueId, acceptor.ActorState.MessageSender.UniqueId);
-            Assert.AreEqual((acceptor.ActorState as AcceptorState).BallotNumber, defaultBallot);
-
-            acceptor.Stop();
-            cleanBrokerSubscription();
+            testSolicitateBallotRequest(ballotNumber, defaultBallot);
         }
 
         private IMessage generateSolicitateBallotRequest(int ballotNumber)
@@ -129,6 +115,54 @@ namespace CSharpPaxosRuntime.Tests
         private void cleanBrokerSubscription()
         {
             this.messageBroker.RemoveReceiver(this.GetHashCode().ToString());
+        }
+
+        private void testSolicitateBallotRequest(int ballotNumber, int expectedBallot)
+        {
+            Acceptor acceptor = getAcceptorWithNoMocks();
+            MessageReceiver testReceiver = new MessageReceiver();
+            subscribeToBroker(testReceiver);
+
+            Task t = Task.Run(() => {
+                acceptor.Start();
+            });
+
+            IMessage request = generateSolicitateBallotRequest(ballotNumber);
+            messageBroker.SendMessage(acceptor.ActorState.MessageSender.UniqueId, request);
+            Thread.Sleep(50);
+
+            SolicitateBallotResponse response = testReceiver.GetLastMessage() as SolicitateBallotResponse;
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(response.BallotNumber, expectedBallot);
+            Assert.AreEqual(response.MessageSender.UniqueId, acceptor.ActorState.MessageSender.UniqueId);
+            Assert.AreEqual((acceptor.ActorState as AcceptorState).BallotNumber, expectedBallot);
+
+            acceptor.Stop();
+            cleanBrokerSubscription();
+        }
+
+        private void testVoteRequest(int ballotNumber, int slotNumber, int expectedBallotNumber)
+        {
+            Acceptor acceptor = getAcceptorWithNoMocks();
+            MessageReceiver testReceiver = new MessageReceiver();
+            subscribeToBroker(testReceiver);
+
+            Task t = Task.Run(() => {
+                acceptor.Start();
+            });
+
+            VoteRequest request = generateVoteRequest(ballotNumber, slotNumber);
+            messageBroker.SendMessage(acceptor.ActorState.MessageSender.UniqueId, request);
+            Thread.Sleep(50);
+
+            VoteResponse response = testReceiver.GetLastMessage() as VoteResponse;
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(response.BallotNumber, expectedBallotNumber);
+
+            acceptor.Stop();
+            cleanBrokerSubscription();
         }
     }
 }

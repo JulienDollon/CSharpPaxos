@@ -49,8 +49,8 @@
     <Compile Include="Messaging\Properties\ISlotNumberProperty.cs" />
     <Compile Include="Messaging\Properties\MessageSender.cs" />
     <Compile Include="Models\Command.cs" />
-    <Compile Include="Models\Decision.cs" />
-    <Compile Include="Models\Decisions.cs" />
+    <Compile Include="Models\VoteDecision.cs" />
+    <Compile Include="Models\VoteDecisions.cs" />
     <Compile Include="Models\ICommand.cs" />
     <Compile Include="Roles\Acceptor\AcceptorState.cs" />
     <Compile Include="Roles\RolesGeneric\IPaxosActorLoopMessageListener.cs" />
@@ -61,6 +61,7 @@
     <Compile Include="Roles\RolesStrategies\SolicitateBallotRequestMessageStrategy.cs" />
     <Compile Include="Roles\IPaxosActorState.cs" />
     <Compile Include="Roles\RolesGeneric\PaxosActorLoopMessageListener.cs" />
+    <Compile Include="Roles\RolesStrategies\VoteRequestMessageStrategy.cs" />
     <Compile Include="Utils\Log\ILogger.cs" />
     <Compile Include="Utils\Log\DebugModeLogger.cs" />
     <Compile Include="Utils\Log\LoggerSingleton.cs" />

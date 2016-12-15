@@ -12,13 +12,13 @@ namespace CSharpPaxosRuntime.Roles
     {
         public AcceptorState()
         {
-            this.AcceptedDecisions = new Decisions();
+            this.AcceptedDecisions = new VoteDecisions();
         }
 
         public int BallotNumber { get; set; }
 
         public MessageSender MessageSender { get; set; }
 
-        public Decisions AcceptedDecisions { get; set; }
+        public VoteDecisions AcceptedDecisions { get; set; }
     }
 }

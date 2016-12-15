@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CSharpPaxosRuntime.Models
 {
-    public class Decision : ISlotNumberProperty, IBallotNumberProperty, ICommandProperty
+    public class VoteDecision : ISlotNumberProperty, IBallotNumberProperty, ICommandProperty
     {
         public int BallotNumber { get; set; }
 

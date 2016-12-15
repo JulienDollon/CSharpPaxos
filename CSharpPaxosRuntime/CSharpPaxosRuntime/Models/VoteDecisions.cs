@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSharpPaxosRuntime.Models
 {
-    public class Decisions : List<Decision>
+    public class VoteDecisions : List<VoteDecision>
     {
     }
 }

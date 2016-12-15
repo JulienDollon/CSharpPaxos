@@ -62,6 +62,9 @@ namespace CSharpPaxosRuntime.Roles
             this.strategyContainer = new StrategyContainer();
             this.strategyContainer.AddStrategy(typeof(SolicitateBallotRequest), 
                 new SolicitateBallotRequestMessageStrategy(this.messageBroker));
+
+            this.strategyContainer.AddStrategy(typeof(VoteRequest),
+                new VoteRequestMessageStrategy(this.messageBroker));
         }
 
         public void Start()
