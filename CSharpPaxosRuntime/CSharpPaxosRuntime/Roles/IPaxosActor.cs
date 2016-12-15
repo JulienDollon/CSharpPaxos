@@ -1,4 +1,6 @@
 ﻿using CSharpPaxosRuntime.Messaging;
+using CSharpPaxosRuntime.RolesStrategies;
+using CSharpPaxosRuntime.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,9 @@ namespace CSharpPaxosRuntime.Roles
 {
     internal interface IPaxosActor
     {
-        IMessageReceiver Receiver { get; }
+        IMessageReceiver MessageReceiver { get; }
+        IPaxosActorState ActorState { get; }
+        void Start();
+        void Stop();
     }
 }

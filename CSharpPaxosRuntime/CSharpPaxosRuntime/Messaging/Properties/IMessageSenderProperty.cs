@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace CSharpPaxosRuntime.Messaging
 {
-    public interface IMessage : IMessageSenderProperty
+    public interface IMessageSenderProperty
     {
+        MessageSender MessageSender { get; set; }
     }
 }

@@ -1,19 +1,31 @@
-﻿using System;
+﻿using CSharpPaxosRuntime.Messaging.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CSharpPaxosRuntime.Models;
 
 namespace CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes
 {
-    public class SolicitateBallotResponse : IMessage
+    public class SolicitateBallotResponse : IMessage, IBallotNumberProperty, IDecisionsProperty
     {
-        IMessageSender IMessage.Sender
+        public int BallotNumber
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get;
+            set;
+        }
+
+        public Decisions Decisions
+        {
+            get;
+            set;
+        }
+
+        public MessageSender MessageSender
+        {
+            get;
+            set;
         }
     }
 }

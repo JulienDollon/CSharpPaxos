@@ -19,19 +19,11 @@ namespace CSharpPaxosRuntime.Messaging
         public void ReceiveMessage(IMessage message)
         {
             messages.Enqueue(message);
-            OnMessageReceived(EventArgs.Empty);
         }
 
         public IMessage GetLastMessage()
         {
             return messages.Dequeue();
-        }
-
-        public event EventHandler MessageReceived;
-        protected virtual void OnMessageReceived(EventArgs e)
-        {
-            if (MessageReceived != null)
-                MessageReceived(this, e);
         }
     }
 }

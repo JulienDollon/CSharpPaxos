@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSharpPaxosRuntime.Messaging.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,14 +7,18 @@ using System.Threading.Tasks;
 
 namespace CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes
 {
-    public class SolicitateBallotRequest : IMessage
+    public class SolicitateBallotRequest : IMessage, IBallotNumberProperty
     {
-        IMessageSender IMessage.Sender
+        public int BallotNumber
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get;
+            set;
+        }
+
+        public MessageSender MessageSender
+        {
+            get;
+            set;
         }
     }
 }

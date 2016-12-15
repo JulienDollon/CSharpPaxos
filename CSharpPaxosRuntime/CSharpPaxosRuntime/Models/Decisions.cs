@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpPaxosRuntime.Messaging
+namespace CSharpPaxosRuntime.Models
 {
-    public interface IMessage : IMessageSenderProperty
+    public class Decisions : List<Decision>
     {
     }
 }

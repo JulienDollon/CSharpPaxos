@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpPaxosRuntime.Messaging
+namespace CSharpPaxosRuntime.Messaging.Properties
 {
-    public interface IMessageReceiver
+    public interface ISlotNumberProperty
     {
-        void ReceiveMessage(IMessage message);
+        int SlotNumber { get; set; }
     }
 }

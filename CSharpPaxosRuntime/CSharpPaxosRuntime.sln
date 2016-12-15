@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpPaxosRuntime.Tests", "CSharpPaxosRuntime.Tests\CSharpPaxosRuntime.Tests.csproj", "{518F1A45-45EE-4711-B8F8-57F4671C3B9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpPaxosRuntime.UnitTests", "CSharpPaxosRuntime.Tests\CSharpPaxosRuntime.UnitTests.csproj", "{518F1A45-45EE-4711-B8F8-57F4671C3B9C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpPaxosRuntime", "CSharpPaxosRuntime\CSharpPaxosRuntime.csproj", "{FEFC22DD-03CF-4DEB-A471-CC26E8670812}"
 EndProject

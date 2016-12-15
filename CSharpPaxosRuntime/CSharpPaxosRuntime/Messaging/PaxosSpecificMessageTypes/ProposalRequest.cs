@@ -8,12 +8,10 @@ namespace CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes
 {
     public class ProposalRequest : IMessage
     {
-        IMessageSender IMessage.Sender
+        public MessageSender MessageSender
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get;
+            set;
         }
     }
 }

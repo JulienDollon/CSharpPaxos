@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace CSharpPaxosRuntime.Messaging
 {
-    public interface IMessage : IMessageSenderProperty
+    public interface IMessageReceiver
     {
+        void ReceiveMessage(IMessage message);
+        IMessage GetLastMessage();
     }
 }

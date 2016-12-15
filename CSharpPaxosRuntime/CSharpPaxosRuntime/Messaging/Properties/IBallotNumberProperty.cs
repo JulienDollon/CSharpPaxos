@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpPaxosRuntime.Messaging
+namespace CSharpPaxosRuntime.Messaging.Properties
 {
-    public interface IMessage : IMessageSenderProperty
+    public interface IBallotNumberProperty
     {
+        int BallotNumber { get; set; }
     }
 }
