@@ -1,37 +1,33 @@
-﻿using CSharpPaxosRuntime.Log;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
+using CSharpPaxosRuntime.Log;
 
 namespace CSharpPaxosRuntime.Utils
 {
     public class FixedSizedQueue<T>
     {
-        readonly ConcurrentQueue<T> queue = new ConcurrentQueue<T>();
-        private int max_size;
-        public FixedSizedQueue(int max_size = 5000000)
+        private readonly int _maxSize;
+        private readonly ConcurrentQueue<T> _queue = new ConcurrentQueue<T>();
+
+        public FixedSizedQueue(int maxSize = 5000000)
         {
-            this.max_size = max_size;
+            _maxSize = maxSize;
         }
 
         public T Dequeue()
         {
             T outObj;
-            queue.TryDequeue(out outObj);
+            _queue.TryDequeue(out outObj);
             return outObj;
         }
 
         public void Enqueue(T obj)
         {
-            this.queue.Enqueue(obj);
+            _queue.Enqueue(obj);
 
-            while (this.queue.Count > this.max_size)
+            while (_queue.Count > _maxSize)
             {
                 T outObj;
-                queue.TryDequeue(out outObj);
+                _queue.TryDequeue(out outObj);
                 LoggerSingleton.Instance.Log(Severity.Info, "Messages lost, max size of the queue reached");
             }
         }

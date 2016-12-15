@@ -4,7 +4,7 @@ namespace CSharpPaxosRuntime.Log
 {
     public class LoggerSingleton
     {
-        private static ILogger instance;
+        private static ILogger _instance;
 
         private LoggerSingleton() { }
 
@@ -12,18 +12,18 @@ namespace CSharpPaxosRuntime.Log
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
                     if (System.Diagnostics.Debugger.IsAttached)
                     {
-                        instance = new DebugModeLogger();
+                        _instance = new DebugModeLogger();
                     }
                     else
                     {
                         throw new NotImplementedException("No logger for production code yet");
                     }
                 }
-                return instance;
+                return _instance;
             }
         }
     }

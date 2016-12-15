@@ -1,43 +1,42 @@
-﻿using CSharpPaxosRuntime.Messaging;
+﻿using System;
+using CSharpPaxosRuntime.Messaging;
 using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
-using CSharpPaxosRuntime.RolesStrategies;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CSharpPaxosRuntime.Messaging.Bus;
+using CSharpPaxosRuntime.Messaging.Properties;
 
 namespace CSharpPaxosRuntime.Roles.RolesStrategies
 {
     public class SolicitateBallotRequestMessageStrategy : IMessageStrategy
     {
-        private IMessageBroker broker;
+        private readonly IMessageBroker _broker;
         public SolicitateBallotRequestMessageStrategy(IMessageBroker broker)
         {
-            this.broker = broker;
+            _broker = broker;
         }
 
         public void Execute(MessageStrategyExecuteArg<IMessage> obj)
         {
-            checkInvalidParameter(obj);
+            CheckInvalidParameter(obj);
 
             SolicitateBallotRequest message = obj.Message as SolicitateBallotRequest;
             AcceptorState state = obj.ActorState as AcceptorState;
 
-            updateBallotNumberIfNeeded(message, state);
-            sendSolicitateBallotResponse(message.MessageSender, state);
+            UpdateBallotNumberIfNeeded(message, state);
+            SendSolicitateBallotResponse(message?.MessageSender, state);
         }
 
-        private void sendSolicitateBallotResponse(MessageSender sendTo, AcceptorState state)
+        private void SendSolicitateBallotResponse(MessageSender sendTo, AcceptorState state)
         {
-            SolicitateBallotResponse response = new SolicitateBallotResponse();
-            response.BallotNumber = state.BallotNumber;
-            response.MessageSender = state.MessageSender;
-            response.Decisions = state.AcceptedDecisions;
-            this.broker.SendMessage(sendTo.UniqueId, response);
+            SolicitateBallotResponse response = new SolicitateBallotResponse
+            {
+                BallotNumber = state.BallotNumber,
+                MessageSender = state.MessageSender,
+                Decisions = state.AcceptedDecisions
+            };
+            _broker.SendMessage(sendTo.UniqueId, response);
         }
 
-        private void updateBallotNumberIfNeeded(SolicitateBallotRequest message, AcceptorState state)
+        private void UpdateBallotNumberIfNeeded(SolicitateBallotRequest message, AcceptorState state)
         {
             if (message.BallotNumber > state.BallotNumber)
             {
@@ -45,8 +44,9 @@ namespace CSharpPaxosRuntime.Roles.RolesStrategies
             }
         }
 
-        private void checkInvalidParameter(MessageStrategyExecuteArg<IMessage> obj)
+        private void CheckInvalidParameter(MessageStrategyExecuteArg<IMessage> obj)
         {
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
             if (!(obj.Message is SolicitateBallotRequest))
             {
                 throw new MessageStrategyException("This strategy shouldn't be invoked with this message type");

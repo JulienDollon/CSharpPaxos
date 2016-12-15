@@ -1,34 +1,31 @@
 ﻿using CSharpPaxosRuntime.Messaging;
-using CSharpPaxosRuntime.Utils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using CSharpPaxosRuntime.Messaging.Bus;
+using CSharpPaxosRuntime.Messaging.Properties;
 
 namespace CSharpPaxosRuntime.Roles
 {
     public class PaxosActorLoopMessageListener : IPaxosActorLoopMessageListener
     {
-        private IMessageReceiver messageReceiver;
-        private Action<IMessage> onMessageDequeued;
-        private IMessageBroker messageBroker;
+        private IMessageReceiver _messageReceiver;
+        private Action<IMessage> _onMessageDequeued;
+        private IMessageBroker _messageBroker;
 
-        public void Initialize(IMessageReceiver MessageReceiver, 
-                               Action<IMessage> OnMessageDequeued,
+        public void Initialize(IMessageReceiver messageReceiver, 
+                               Action<IMessage> onMessageDequeued,
                                IMessageBroker messageBroker,
                                MessageSender owner)
         {
-            this.messageReceiver = MessageReceiver;
-            this.onMessageDequeued = OnMessageDequeued;
-            this.messageBroker = messageBroker;
-            initializeMessageBrokerSubscription(owner.UniqueId);
+            _messageReceiver = messageReceiver;
+            _onMessageDequeued = onMessageDequeued;
+            _messageBroker = messageBroker;
+            InitializeMessageBrokerSubscription(owner.UniqueId);
         }
 
-        private void initializeMessageBrokerSubscription(string uniqueId)
+        private void InitializeMessageBrokerSubscription(string uniqueId)
         {
-            this.messageBroker.AddReceiver(uniqueId, this.messageReceiver);
+            _messageBroker.AddReceiver(uniqueId, _messageReceiver);
         }
 
         public bool KeepRunning { get; set; }
@@ -39,10 +36,10 @@ namespace CSharpPaxosRuntime.Roles
             SpinWait waiter = new SpinWait();
             while (KeepRunning)
             {
-                IMessage lastMessage = this.messageReceiver.GetLastMessage();
+                IMessage lastMessage = _messageReceiver.GetLastMessage();
                 if (lastMessage != null)
                 {
-                    this.onMessageDequeued.Invoke(lastMessage);
+                    _onMessageDequeued.Invoke(lastMessage);
                 }
 
                 waiter.SpinOnce();

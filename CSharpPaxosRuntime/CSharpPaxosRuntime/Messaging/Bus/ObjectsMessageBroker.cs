@@ -1,35 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace CSharpPaxosRuntime.Messaging
+namespace CSharpPaxosRuntime.Messaging.Bus
 {
     public class ObjectsMessageBroker : IMessageBroker
     {
         public ObjectsMessageBroker()
         {
-            this.hashtableOfReceiver = new Dictionary<string, IMessageReceiver>();
+            _hashtableOfReceiver = new Dictionary<string, IMessageReceiver>();
         }
 
-        private Dictionary<string, IMessageReceiver> hashtableOfReceiver;
+        private readonly Dictionary<string, IMessageReceiver> _hashtableOfReceiver;
 
         public void AddReceiver(string receiverAddress, IMessageReceiver instance)
         {
-            this.hashtableOfReceiver.Add(receiverAddress, instance);
+            _hashtableOfReceiver.Add(receiverAddress, instance);
         }
 
         public void RemoveReceiver(string receiverAddress)
         {
-            this.hashtableOfReceiver.Remove(receiverAddress);
+            _hashtableOfReceiver.Remove(receiverAddress);
         }
 
         public bool SendMessage(string receiverAddress, IMessage message)
         {
-            IMessageReceiver receiver = null;
-            bool success = this.hashtableOfReceiver.TryGetValue(receiverAddress, out receiver);
-            receiver.ReceiveMessage(message);
+            IMessageReceiver receiver;
+            bool success = _hashtableOfReceiver.TryGetValue(receiverAddress, out receiver);
+            receiver?.ReceiveMessage(message);
             return success;
         }
     }
