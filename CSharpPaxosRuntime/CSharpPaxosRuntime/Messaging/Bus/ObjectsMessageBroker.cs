@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace CSharpPaxosRuntime.Messaging
+namespace CSharpPaxosRuntime.Messaging.Bus
 {
     public class ObjectsMessageBroker : IMessageBroker
     {
@@ -13,7 +9,7 @@ namespace CSharpPaxosRuntime.Messaging
             this.hashtableOfReceiver = new Dictionary<string, IMessageReceiver>();
         }
 
-        private Dictionary<string, IMessageReceiver> hashtableOfReceiver;
+        private readonly Dictionary<string, IMessageReceiver> hashtableOfReceiver;
 
         public void AddReceiver(string receiverAddress, IMessageReceiver instance)
         {
@@ -29,7 +25,7 @@ namespace CSharpPaxosRuntime.Messaging
         {
             IMessageReceiver receiver = null;
             bool success = this.hashtableOfReceiver.TryGetValue(receiverAddress, out receiver);
-            receiver.ReceiveMessage(message);
+            receiver?.ReceiveMessage(message);
             return success;
         }
     }

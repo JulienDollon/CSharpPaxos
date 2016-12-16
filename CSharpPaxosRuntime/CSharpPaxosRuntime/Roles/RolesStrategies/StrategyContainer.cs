@@ -1,11 +1,6 @@
 ﻿using CSharpPaxosRuntime.Messaging;
-using CSharpPaxosRuntime.Roles.RolesStrategies;
-using CSharpPaxosRuntime.RolesStrategies;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CSharpPaxosRuntime.Roles.RolesStrategies
 {
@@ -21,7 +16,7 @@ namespace CSharpPaxosRuntime.Roles.RolesStrategies
             this.messageStrategies.Add(t, strategy);
         }
 
-        private Dictionary<Type, IMessageStrategy> messageStrategies;
+        private readonly Dictionary<Type, IMessageStrategy> messageStrategies;
 
         public void ExecuteStrategy(IMessage message, IPaxosActorState currentState)
         {
@@ -31,9 +26,11 @@ namespace CSharpPaxosRuntime.Roles.RolesStrategies
                 return;
             }
 
-            MessageStrategyExecuteArg<IMessage> arg = new MessageStrategyExecuteArg<IMessage>();
-            arg.ActorState = currentState;
-            arg.Message = message;
+            MessageStrategyExecuteArg<IMessage> arg = new MessageStrategyExecuteArg<IMessage>
+            {
+                ActorState = currentState,
+                Message = message
+            };
             messageStrategy.Execute(arg);
         }
 

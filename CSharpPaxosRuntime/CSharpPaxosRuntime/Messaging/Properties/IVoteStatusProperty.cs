@@ -2,8 +2,8 @@
 
 namespace CSharpPaxosRuntime.Messaging.Properties
 {
-    public interface ICommandProperty
+    public interface IVoteStatusProperty
     {
-        ICommand Command { get; set; }
+        VoteStatus VoteStatus { get; set; }
     }
 }

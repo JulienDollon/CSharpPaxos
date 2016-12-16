@@ -1,12 +1,7 @@
-﻿using CSharpPaxosRuntime.Messaging;
+﻿using CSharpPaxosRuntime.Messaging.Properties;
 using CSharpPaxosRuntime.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CSharpPaxosRuntime.Roles
+namespace CSharpPaxosRuntime.Roles.Acceptor
 {
     public class AcceptorState : IPaxosActorState
     {

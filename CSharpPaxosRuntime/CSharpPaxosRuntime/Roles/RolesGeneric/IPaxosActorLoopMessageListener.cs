@@ -1,8 +1,10 @@
-﻿using CSharpPaxosRuntime.Messaging;
+﻿using System;
+using CSharpPaxosRuntime.Messaging;
+using CSharpPaxosRuntime.Messaging.Bus;
+using CSharpPaxosRuntime.Messaging.Properties;
 using CSharpPaxosRuntime.Utils;
-using System;
 
-namespace CSharpPaxosRuntime.Roles
+namespace CSharpPaxosRuntime.Roles.RolesGeneric
 {
     public interface IPaxosActorLoopMessageListener : IStrategy
     {

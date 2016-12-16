@@ -1,11 +1,6 @@
 ﻿using CSharpPaxosRuntime.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CSharpPaxosRuntime.Messaging
+namespace CSharpPaxosRuntime.Messaging.Bus
 {
     public class MessageReceiver : IMessageReceiver
     {
@@ -14,7 +9,7 @@ namespace CSharpPaxosRuntime.Messaging
             this.messages = new FixedSizedQueue<IMessage>();
         }
 
-        private FixedSizedQueue<IMessage> messages;
+        private readonly FixedSizedQueue<IMessage> messages;
 
         public void ReceiveMessage(IMessage message)
         {

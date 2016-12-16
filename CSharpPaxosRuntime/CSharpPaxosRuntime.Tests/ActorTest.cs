@@ -3,11 +3,16 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpPaxosRuntime.Roles;
-using CSharpPaxosRuntime.Log;
 using CSharpPaxosRuntime.Messaging;
 using System.Threading.Tasks;
 using System.Threading;
+using CSharpPaxosRuntime.Messaging.Bus;
 using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
+using CSharpPaxosRuntime.Messaging.Properties;
+using CSharpPaxosRuntime.Models;
+using CSharpPaxosRuntime.Roles.Acceptor;
+using CSharpPaxosRuntime.Roles.RolesGeneric;
+using CSharpPaxosRuntime.Utils.Log;
 
 namespace CSharpPaxosRuntime.Tests
 {
@@ -18,7 +23,7 @@ namespace CSharpPaxosRuntime.Tests
         {
         }
 
-        IMessageBroker messageBroker = new ObjectsMessageBroker();
+        readonly IMessageBroker messageBroker = new ObjectsMessageBroker();
 
         [TestMethod]
         public void TestIfInstanceIsWellInitialized()
@@ -53,8 +58,8 @@ namespace CSharpPaxosRuntime.Tests
         {
             int ballotNumber = 0;
             int slotNumber = 10;
-            int expectedBallotNumber = 0;
-            testVoteRequest(ballotNumber, slotNumber, expectedBallotNumber);
+            VoteStatus expectedVoteStatus = VoteStatus.Accepted;
+            testVoteRequest(ballotNumber, slotNumber, expectedVoteStatus);
         }
 
         [TestMethod]
@@ -62,16 +67,18 @@ namespace CSharpPaxosRuntime.Tests
         {
             int ballotNumber = -1;
             int slotNumber = 10;
-            int expectedBallotNumber = 0;
-            testVoteRequest(ballotNumber, slotNumber, expectedBallotNumber);
+            VoteStatus expectedVoteStatus = VoteStatus.Rejected;
+            testVoteRequest(ballotNumber, slotNumber, expectedVoteStatus);
         }
 
         private VoteRequest generateVoteRequest(int ballotNumber, int slotNumber)
         {
-            VoteRequest vote = new VoteRequest();
-            vote.BallotNumber = ballotNumber;
-            vote.MessageSender = new MessageSender() { UniqueId = this.GetHashCode().ToString() };
-            vote.SlotNumber = slotNumber;
+            VoteRequest vote = new VoteRequest
+            {
+                BallotNumber = ballotNumber,
+                MessageSender = new MessageSender() {UniqueId = this.GetHashCode().ToString()},
+                SlotNumber = slotNumber
+            };
             return vote;
         }
 
@@ -92,9 +99,11 @@ namespace CSharpPaxosRuntime.Tests
 
         private IMessage generateSolicitateBallotRequest(int ballotNumber)
         {
-            SolicitateBallotRequest request = new SolicitateBallotRequest();
-            request.MessageSender = new MessageSender() { UniqueId = this.GetHashCode().ToString() };
-            request.BallotNumber = ballotNumber;
+            SolicitateBallotRequest request = new SolicitateBallotRequest
+            {
+                MessageSender = new MessageSender() {UniqueId = this.GetHashCode().ToString()},
+                BallotNumber = ballotNumber
+            };
             return request;
         }
 
@@ -142,7 +151,7 @@ namespace CSharpPaxosRuntime.Tests
             cleanBrokerSubscription();
         }
 
-        private void testVoteRequest(int ballotNumber, int slotNumber, int expectedBallotNumber)
+        private void testVoteRequest(int ballotNumber, int slotNumber, VoteStatus expectedVoteStatus)
         {
             Acceptor acceptor = getAcceptorWithNoMocks();
             MessageReceiver testReceiver = new MessageReceiver();
@@ -159,7 +168,7 @@ namespace CSharpPaxosRuntime.Tests
             VoteResponse response = testReceiver.GetLastMessage() as VoteResponse;
 
             Assert.IsNotNull(response);
-            Assert.AreEqual(response.BallotNumber, expectedBallotNumber);
+            Assert.AreEqual(response.VoteStatus, expectedVoteStatus);
 
             acceptor.Stop();
             cleanBrokerSubscription();

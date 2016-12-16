@@ -1,13 +1,10 @@
-﻿using CSharpPaxosRuntime.Messaging;
-using CSharpPaxosRuntime.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
+using CSharpPaxosRuntime.Messaging;
+using CSharpPaxosRuntime.Messaging.Bus;
+using CSharpPaxosRuntime.Messaging.Properties;
 
-namespace CSharpPaxosRuntime.Roles
+namespace CSharpPaxosRuntime.Roles.RolesGeneric
 {
     public class PaxosActorLoopMessageListener : IPaxosActorLoopMessageListener
     {

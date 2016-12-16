@@ -1,17 +1,14 @@
 ﻿using CSharpPaxosRuntime.Messaging;
 using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
-using CSharpPaxosRuntime.RolesStrategies;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CSharpPaxosRuntime.Messaging.Bus;
+using CSharpPaxosRuntime.Messaging.Properties;
+using CSharpPaxosRuntime.Roles.Acceptor;
 
 namespace CSharpPaxosRuntime.Roles.RolesStrategies
 {
     public class SolicitateBallotRequestMessageStrategy : IMessageStrategy
     {
-        private IMessageBroker broker;
+        private readonly IMessageBroker broker;
         public SolicitateBallotRequestMessageStrategy(IMessageBroker broker)
         {
             this.broker = broker;
@@ -30,10 +27,12 @@ namespace CSharpPaxosRuntime.Roles.RolesStrategies
 
         private void sendSolicitateBallotResponse(MessageSender sendTo, AcceptorState state)
         {
-            SolicitateBallotResponse response = new SolicitateBallotResponse();
-            response.BallotNumber = state.BallotNumber;
-            response.MessageSender = state.MessageSender;
-            response.Decisions = state.AcceptedDecisions;
+            SolicitateBallotResponse response = new SolicitateBallotResponse
+            {
+                BallotNumber = state.BallotNumber,
+                MessageSender = state.MessageSender,
+                Decisions = state.AcceptedDecisions
+            };
             this.broker.SendMessage(sendTo.UniqueId, response);
         }
 

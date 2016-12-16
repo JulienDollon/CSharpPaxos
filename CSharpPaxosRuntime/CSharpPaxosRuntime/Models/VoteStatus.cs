@@ -1,6 +1,7 @@
 ﻿namespace CSharpPaxosRuntime.Models
 {
-    public interface ICommand
+    public enum VoteStatus
     {
+        Accepted, Rejected
     }
 }

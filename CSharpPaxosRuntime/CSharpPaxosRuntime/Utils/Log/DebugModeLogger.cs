@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CSharpPaxosRuntime.Log
+namespace CSharpPaxosRuntime.Utils.Log
 {
     public class DebugModeLogger : ILogger
     {

@@ -47,11 +47,13 @@
     <Compile Include="Messaging\Properties\ICommandProperty.cs" />
     <Compile Include="Messaging\Properties\IDecisionsProperty.cs" />
     <Compile Include="Messaging\Properties\ISlotNumberProperty.cs" />
+    <Compile Include="Messaging\Properties\IVoteStatusProperty.cs" />
     <Compile Include="Messaging\Properties\MessageSender.cs" />
     <Compile Include="Models\Command.cs" />
     <Compile Include="Models\VoteDecision.cs" />
     <Compile Include="Models\VoteDecisions.cs" />
     <Compile Include="Models\ICommand.cs" />
+    <Compile Include="Models\VoteStatus.cs" />
     <Compile Include="Roles\Acceptor\AcceptorState.cs" />
     <Compile Include="Roles\RolesGeneric\IPaxosActorLoopMessageListener.cs" />
     <Compile Include="Roles\RolesStrategies\StrategyContainer.cs" />

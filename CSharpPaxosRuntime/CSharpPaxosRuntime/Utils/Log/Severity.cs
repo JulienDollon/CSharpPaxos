@@ -1,4 +1,4 @@
-﻿namespace CSharpPaxosRuntime.Log
+﻿namespace CSharpPaxosRuntime.Utils.Log
 {
     public enum Severity
     {

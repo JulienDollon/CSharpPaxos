@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CSharpPaxosRuntime.Messaging;
-using CSharpPaxosRuntime.Log;
-using CSharpPaxosRuntime.Utils;
+﻿using CSharpPaxosRuntime.Messaging;
+using CSharpPaxosRuntime.Messaging.Bus;
 using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
-using CSharpPaxosRuntime.RolesStrategies;
+using CSharpPaxosRuntime.Messaging.Properties;
+using CSharpPaxosRuntime.Roles.RolesGeneric;
 using CSharpPaxosRuntime.Roles.RolesStrategies;
+using CSharpPaxosRuntime.Utils.Log;
 
-namespace CSharpPaxosRuntime.Roles
+namespace CSharpPaxosRuntime.Roles.Acceptor
 {
     public class Acceptor : IPaxosActor
     {
         const int defaultBallotNumber = 0;
 
         private ILogger logger;
-        private IMessageReceiver messageReceiver;
-        private IMessageBroker messageBroker;
-        private IPaxosActorLoopMessageListener loopListener;
+        private readonly IMessageBroker messageBroker;
+        private readonly IPaxosActorLoopMessageListener loopListener;
         private AcceptorState currentAcceptorState;
         private StrategyContainer strategyContainer;
 
@@ -29,7 +24,7 @@ namespace CSharpPaxosRuntime.Roles
                         IMessageBroker messageBroker)
         {
             this.logger = logger;
-            this.messageReceiver = receiver;
+            this.MessageReceiver = receiver;
             this.loopListener = loopListener;
             this.messageBroker = messageBroker;
 
@@ -48,13 +43,15 @@ namespace CSharpPaxosRuntime.Roles
 
         private void initializeState()
         {
-            this.currentAcceptorState = new AcceptorState();
-            this.currentAcceptorState.MessageSender = new MessageSender()
+            this.currentAcceptorState = new AcceptorState
+            {
+                MessageSender = new MessageSender()
                 {
                     UniqueId = this.GetHashCode().ToString()
-                };
+                },
+                BallotNumber = defaultBallotNumber
+            };
 
-            this.currentAcceptorState.BallotNumber = defaultBallotNumber;
         }
 
         private void initializeMessageStrategies()
@@ -82,20 +79,8 @@ namespace CSharpPaxosRuntime.Roles
             this.strategyContainer.ExecuteStrategy(lastMessage, this.currentAcceptorState);
         }
 
-        public IMessageReceiver MessageReceiver
-        {
-            get
-            {
-                return this.messageReceiver;
-            }
-        }
+        public IMessageReceiver MessageReceiver { get; }
 
-        public IPaxosActorState ActorState
-        {
-            get
-            {
-                return currentAcceptorState;
-            }
-        }
+        public IPaxosActorState ActorState => currentAcceptorState;
     }
 }
