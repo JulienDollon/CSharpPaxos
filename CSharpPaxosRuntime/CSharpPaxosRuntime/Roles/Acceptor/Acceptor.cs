@@ -1,9 +1,8 @@
 ﻿using System;
 using CSharpPaxosRuntime.Messaging;
 using CSharpPaxosRuntime.Messaging.Bus;
-using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
-using CSharpPaxosRuntime.Messaging.Properties;
 using CSharpPaxosRuntime.Models;
+using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies;
 using CSharpPaxosRuntime.Roles.RolesGeneric;
 using CSharpPaxosRuntime.Utils.Log;
@@ -29,7 +28,7 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
 
             this.initializeState();
             this.initializeLoopListener();
-            this.defineSupportedMessageTypes();
+            this.defineSupportedMessage();
         }
 
         private void initializeLoopListener()
@@ -53,7 +52,7 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
 
         }
 
-        private void defineSupportedMessageTypes()
+        private void defineSupportedMessage()
         {
             this.strategyContainer = new StrategyContainer();
             this.strategyContainer.AddStrategy(typeof(SolicitateBallotRequest), 
@@ -80,7 +79,6 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
 
         public IPaxosActorState ActorState => currentAcceptorState;
         public IMessageReceiver MessageReceiver { get; set; }
-
         public IMessageBroker MessageBroker { get; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Models;
+using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Roles.Acceptor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

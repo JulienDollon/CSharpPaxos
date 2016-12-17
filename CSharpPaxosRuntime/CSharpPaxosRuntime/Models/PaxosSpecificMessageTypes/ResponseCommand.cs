@@ -1,7 +1,7 @@
-﻿using CSharpPaxosRuntime.Messaging.Bus;
-using CSharpPaxosRuntime.Messaging.Properties;
+﻿using CSharpPaxosRuntime.Messaging;
+using CSharpPaxosRuntime.Messaging.Bus;
 
-namespace CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes
+namespace CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes
 {
     public class ResponseCommand : IMessage
     {

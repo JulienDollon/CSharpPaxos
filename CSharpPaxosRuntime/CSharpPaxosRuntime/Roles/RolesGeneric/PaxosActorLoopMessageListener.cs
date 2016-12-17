@@ -2,7 +2,6 @@
 using System.Threading;
 using CSharpPaxosRuntime.Messaging;
 using CSharpPaxosRuntime.Messaging.Bus;
-using CSharpPaxosRuntime.Messaging.Properties;
 
 namespace CSharpPaxosRuntime.Roles.RolesGeneric
 {

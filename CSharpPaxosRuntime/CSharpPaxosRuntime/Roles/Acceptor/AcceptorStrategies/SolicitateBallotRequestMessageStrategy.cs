@@ -1,7 +1,6 @@
 ﻿using CSharpPaxosRuntime.Messaging;
 using CSharpPaxosRuntime.Messaging.Bus;
-using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
-using CSharpPaxosRuntime.Messaging.Properties;
+using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Roles.RolesGeneric;
 
 namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies

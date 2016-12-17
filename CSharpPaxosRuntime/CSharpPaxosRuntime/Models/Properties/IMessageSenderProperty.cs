@@ -1,6 +1,6 @@
 ﻿using CSharpPaxosRuntime.Messaging.Bus;
 
-namespace CSharpPaxosRuntime.Messaging.Properties
+namespace CSharpPaxosRuntime.Models.Properties
 {
     public interface IMessageSenderProperty
     {

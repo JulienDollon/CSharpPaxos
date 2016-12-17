@@ -1,6 +1,4 @@
-﻿using CSharpPaxosRuntime.Models;
-
-namespace CSharpPaxosRuntime.Messaging.Properties
+﻿namespace CSharpPaxosRuntime.Models.Properties
 {
     public interface IBallotNumberProperty
     {

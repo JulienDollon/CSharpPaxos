@@ -1,4 +1,4 @@
-﻿using CSharpPaxosRuntime.Messaging.Properties;
+﻿using CSharpPaxosRuntime.Models.Properties;
 
 namespace CSharpPaxosRuntime.Roles
 {

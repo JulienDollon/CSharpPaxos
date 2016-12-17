@@ -1,5 +1,5 @@
 ﻿using CSharpPaxosRuntime.Messaging.Bus;
-using CSharpPaxosRuntime.Messaging.Properties;
+using CSharpPaxosRuntime.Models.Properties;
 
 namespace CSharpPaxosRuntime.Roles
 {

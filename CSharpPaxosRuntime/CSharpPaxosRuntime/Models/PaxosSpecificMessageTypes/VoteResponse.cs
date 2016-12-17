@@ -1,8 +1,8 @@
-﻿using CSharpPaxosRuntime.Messaging.Bus;
-using CSharpPaxosRuntime.Messaging.Properties;
-using CSharpPaxosRuntime.Models;
+﻿using CSharpPaxosRuntime.Messaging;
+using CSharpPaxosRuntime.Messaging.Bus;
+using CSharpPaxosRuntime.Models.Properties;
 
-namespace CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes
+namespace CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes
 {
     public class VoteResponse : IMessage, IBallotNumberProperty, ISlotNumberProperty, IVoteStatusProperty
     {

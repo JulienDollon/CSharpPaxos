@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using CSharpPaxosRuntime.Messaging;
 using CSharpPaxosRuntime.Messaging.Bus;
-using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Models;
+using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Roles.Acceptor;
 using CSharpPaxosRuntime.Roles.RolesGeneric;
 using CSharpPaxosRuntime.Utils.Log;
