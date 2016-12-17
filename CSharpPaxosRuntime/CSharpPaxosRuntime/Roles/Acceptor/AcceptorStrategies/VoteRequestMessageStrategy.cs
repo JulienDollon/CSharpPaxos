@@ -3,9 +3,9 @@ using CSharpPaxosRuntime.Messaging.Bus;
 using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Messaging.Properties;
 using CSharpPaxosRuntime.Models;
-using CSharpPaxosRuntime.Roles.Acceptor;
+using CSharpPaxosRuntime.Roles.RolesGeneric;
 
-namespace CSharpPaxosRuntime.Roles.RolesStrategies
+namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
 {
     public class VoteRequestMessageStrategy : IMessageStrategy
     {
@@ -67,7 +67,7 @@ namespace CSharpPaxosRuntime.Roles.RolesStrategies
             state.AcceptedDecisions.Add(vote);
         }
 
-        private bool ballotIsValid(int ballotNumber1, int ballotNumber2)
+        private bool ballotIsValid(BallotNumber ballotNumber1, BallotNumber ballotNumber2)
         {
             return ballotNumber1 == ballotNumber2;
         }

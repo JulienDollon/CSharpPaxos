@@ -1,7 +1,9 @@
-﻿namespace CSharpPaxosRuntime.Messaging.Properties
+﻿using CSharpPaxosRuntime.Models;
+
+namespace CSharpPaxosRuntime.Messaging.Properties
 {
     public interface IBallotNumberProperty
     {
-        int BallotNumber { get; set; }
+        BallotNumber BallotNumber { get; set; }
     }
 }

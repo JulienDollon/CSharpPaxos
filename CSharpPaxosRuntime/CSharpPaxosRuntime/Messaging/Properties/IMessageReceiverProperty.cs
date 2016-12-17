@@ -2,8 +2,8 @@
 
 namespace CSharpPaxosRuntime.Messaging.Properties
 {
-    public interface IMessageSenderProperty
+    public interface IMessageReceiverProperty
     {
-        MessageSender MessageSender { get; set; }
+        IMessageReceiver MessageReceiver { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using CSharpPaxosRuntime.Messaging;
 
-namespace CSharpPaxosRuntime.Roles.RolesStrategies
+namespace CSharpPaxosRuntime.Roles.RolesGeneric
 {
     public class MessageStrategyExecuteArg<T> where T : IMessage
     {

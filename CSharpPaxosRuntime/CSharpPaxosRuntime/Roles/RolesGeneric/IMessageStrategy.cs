@@ -1,7 +1,7 @@
 ﻿using CSharpPaxosRuntime.Messaging;
 using CSharpPaxosRuntime.Utils;
 
-namespace CSharpPaxosRuntime.Roles.RolesStrategies
+namespace CSharpPaxosRuntime.Roles.RolesGeneric
 {
     public interface IMessageStrategy : IStrategy<MessageStrategyExecuteArg<IMessage>>
     {

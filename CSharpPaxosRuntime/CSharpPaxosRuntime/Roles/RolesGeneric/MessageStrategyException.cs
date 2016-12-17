@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CSharpPaxosRuntime.Roles.RolesStrategies
+namespace CSharpPaxosRuntime.Roles.RolesGeneric
 {
     class MessageStrategyException : InvalidOperationException
     {

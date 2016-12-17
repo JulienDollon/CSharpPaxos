@@ -13,7 +13,14 @@ namespace CSharpPaxosRuntime.Messaging.Bus
 
         public void AddReceiver(string receiverAddress, IMessageReceiver instance)
         {
-            this.hashtableOfReceiver.Add(receiverAddress, instance);
+            if (!this.hashtableOfReceiver.ContainsKey(receiverAddress))
+            {
+                this.hashtableOfReceiver.Add(receiverAddress, instance);
+            }
+            else
+            {
+                this.hashtableOfReceiver[receiverAddress] = instance;
+            }
         }
 
         public void RemoveReceiver(string receiverAddress)

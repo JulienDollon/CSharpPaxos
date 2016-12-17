@@ -1,10 +1,10 @@
 ﻿using CSharpPaxosRuntime.Messaging;
-using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Messaging.Bus;
+using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Messaging.Properties;
-using CSharpPaxosRuntime.Roles.Acceptor;
+using CSharpPaxosRuntime.Roles.RolesGeneric;
 
-namespace CSharpPaxosRuntime.Roles.RolesStrategies
+namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
 {
     public class SolicitateBallotRequestMessageStrategy : IMessageStrategy
     {

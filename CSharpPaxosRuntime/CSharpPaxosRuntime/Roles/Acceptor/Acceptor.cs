@@ -1,19 +1,18 @@
-﻿using CSharpPaxosRuntime.Messaging;
+﻿using System;
+using CSharpPaxosRuntime.Messaging;
 using CSharpPaxosRuntime.Messaging.Bus;
 using CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Messaging.Properties;
+using CSharpPaxosRuntime.Models;
+using CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies;
 using CSharpPaxosRuntime.Roles.RolesGeneric;
-using CSharpPaxosRuntime.Roles.RolesStrategies;
 using CSharpPaxosRuntime.Utils.Log;
 
 namespace CSharpPaxosRuntime.Roles.Acceptor
 {
     public class Acceptor : IPaxosActor
     {
-        const int defaultBallotNumber = 0;
-
         private ILogger logger;
-        private readonly IMessageBroker messageBroker;
         private readonly IPaxosActorLoopMessageListener loopListener;
         private AcceptorState currentAcceptorState;
         private StrategyContainer strategyContainer;
@@ -26,18 +25,18 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
             this.logger = logger;
             this.MessageReceiver = receiver;
             this.loopListener = loopListener;
-            this.messageBroker = messageBroker;
+            this.MessageBroker = messageBroker;
 
             this.initializeState();
             this.initializeLoopListener();
-            this.initializeMessageStrategies();
+            this.defineSupportedMessageTypes();
         }
 
         private void initializeLoopListener()
         {
             this.loopListener.Initialize(this.MessageReceiver,
                                          this.onMessageDequeued,
-                                         this.messageBroker,
+                                         this.MessageBroker,
                                          this.currentAcceptorState.MessageSender);
         }
 
@@ -49,19 +48,19 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
                 {
                     UniqueId = this.GetHashCode().ToString()
                 },
-                BallotNumber = defaultBallotNumber
+                BallotNumber = BallotNumber.Empty()
             };
 
         }
 
-        private void initializeMessageStrategies()
+        private void defineSupportedMessageTypes()
         {
             this.strategyContainer = new StrategyContainer();
             this.strategyContainer.AddStrategy(typeof(SolicitateBallotRequest), 
-                new SolicitateBallotRequestMessageStrategy(this.messageBroker));
+                new SolicitateBallotRequestMessageStrategy(this.MessageBroker));
 
             this.strategyContainer.AddStrategy(typeof(VoteRequest),
-                new VoteRequestMessageStrategy(this.messageBroker));
+                new VoteRequestMessageStrategy(this.MessageBroker));
         }
 
         public void Start()
@@ -79,8 +78,9 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
             this.strategyContainer.ExecuteStrategy(lastMessage, this.currentAcceptorState);
         }
 
-        public IMessageReceiver MessageReceiver { get; }
-
         public IPaxosActorState ActorState => currentAcceptorState;
+        public IMessageReceiver MessageReceiver { get; set; }
+
+        public IMessageBroker MessageBroker { get; }
     }
 }

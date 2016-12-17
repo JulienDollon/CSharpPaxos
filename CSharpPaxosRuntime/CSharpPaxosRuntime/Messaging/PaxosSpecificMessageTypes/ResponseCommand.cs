@@ -1,4 +1,5 @@
-﻿using CSharpPaxosRuntime.Messaging.Properties;
+﻿using CSharpPaxosRuntime.Messaging.Bus;
+using CSharpPaxosRuntime.Messaging.Properties;
 
 namespace CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes
 {

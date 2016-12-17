@@ -1,11 +1,12 @@
-﻿using CSharpPaxosRuntime.Messaging.Properties;
+﻿using CSharpPaxosRuntime.Messaging.Bus;
+using CSharpPaxosRuntime.Messaging.Properties;
 using CSharpPaxosRuntime.Models;
 
 namespace CSharpPaxosRuntime.Messaging.PaxosSpecificMessageTypes
 {
     public class VoteRequest : IMessage, IBallotNumberProperty, ISlotNumberProperty, ICommandProperty
     {
-        public int BallotNumber
+        public BallotNumber BallotNumber
         {
             get;
             set;

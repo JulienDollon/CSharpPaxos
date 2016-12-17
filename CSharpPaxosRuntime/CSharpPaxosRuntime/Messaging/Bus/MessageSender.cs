@@ -1,4 +1,4 @@
-﻿namespace CSharpPaxosRuntime.Messaging.Properties
+﻿namespace CSharpPaxosRuntime.Messaging.Bus
 {
     public class MessageSender
     {

@@ -4,7 +4,7 @@ namespace CSharpPaxosRuntime.Models
 {
     public class VoteDecision : ISlotNumberProperty, IBallotNumberProperty, ICommandProperty
     {
-        public int BallotNumber { get; set; }
+        public BallotNumber BallotNumber { get; set; }
 
         public ICommand Command { get; set; }
 

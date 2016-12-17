@@ -1,8 +1,8 @@
-﻿using CSharpPaxosRuntime.Messaging;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using CSharpPaxosRuntime.Messaging;
 
-namespace CSharpPaxosRuntime.Roles.RolesStrategies
+namespace CSharpPaxosRuntime.Roles.RolesGeneric
 {
     public class StrategyContainer
     {

@@ -52,8 +52,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ActorTest.cs" />
+    <Compile Include="Roles\AcceptorRole\IntegrationTests\AcceptorTest.cs" />
+    <Compile Include="Models\UnitTests\BallotNumberTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Roles\AcceptorRole\IntegrationTests\AcceptorTestUtil.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
