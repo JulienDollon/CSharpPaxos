@@ -3,10 +3,10 @@ using CSharpPaxosRuntime.Models.Properties;
 
 namespace CSharpPaxosRuntime.Roles
 {
-    internal interface IPaxosActor : IMessageReceiverProperty
+    internal interface IPaxosRole : IMessageReceiverProperty
     {
         IMessageBroker MessageBroker { get; }
-        IPaxosActorState ActorState { get; }
+        IPaxosRoleState RoleState { get; }
         void Start();
         void Stop();
     }

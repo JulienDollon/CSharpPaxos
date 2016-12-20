@@ -5,10 +5,10 @@ using CSharpPaxosRuntime.Roles.RolesGeneric;
 
 namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
 {
-    public class SolicitateBallotRequestMessageStrategy : IMessageStrategy
+    public class SendUpdatedBallotNumberStrategy : IMessageStrategy
     {
         private readonly IMessageBroker broker;
-        public SolicitateBallotRequestMessageStrategy(IMessageBroker broker)
+        public SendUpdatedBallotNumberStrategy(IMessageBroker broker)
         {
             this.broker = broker;
         }
@@ -18,7 +18,7 @@ namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
             checkInvalidParameter(obj);
 
             SolicitateBallotRequest message = obj.Message as SolicitateBallotRequest;
-            AcceptorState state = obj.ActorState as AcceptorState;
+            AcceptorState state = obj.RoleState as AcceptorState;
 
             updateBallotNumberIfNeeded(message, state);
             sendSolicitateBallotResponse(message.MessageSender, state);
@@ -30,7 +30,7 @@ namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
             {
                 BallotNumber = state.BallotNumber,
                 MessageSender = state.MessageSender,
-                Decisions = state.AcceptedDecisions
+                Decision = state.AcceptedDecision
             };
             this.broker.SendMessage(sendTo.UniqueId, response);
         }
@@ -50,7 +50,7 @@ namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
                 throw new MessageStrategyException("This strategy shouldn't be invoked with this message type");
             }
 
-            if (!(obj.ActorState is AcceptorState))
+            if (!(obj.RoleState is AcceptorState))
             {
                 throw new MessageStrategyException("This strategy should only be executed by an acceptor");
             }

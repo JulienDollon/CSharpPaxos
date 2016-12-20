@@ -2,7 +2,7 @@
 
 namespace CSharpPaxosRuntime.Roles
 {
-    public interface IPaxosActorState : IMessageSenderProperty
+    public interface IPaxosRoleState : IMessageSenderProperty
     {
     }
 }

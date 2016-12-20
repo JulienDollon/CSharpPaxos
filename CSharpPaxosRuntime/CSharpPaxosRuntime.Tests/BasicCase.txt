@@ -1,0 +1,11 @@
+﻿Message flow: Multi-Paxos, start
+
+Client   Replica   Leader      Acceptor     All other replicas
+   |       |         |          |  |  |       |  | --- First Request ---
+   X------>X-------->|          |  |  |       |  |  Request
+   |       |         X--------->|->|->|       |  |  Ballot please
+   |       |         |<---------X--X--X       |  |  You got your ballot
+   |       |         X--------->|->|->|       |  |  Here is the value
+   |       |         |<---------X--X--X       |->|  We accept it
+   |       |<--------X----------------------->X--X  Leader informs everyone
+   |<------X         |          |  |  |       |  |  Client is updated

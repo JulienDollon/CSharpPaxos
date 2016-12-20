@@ -6,10 +6,10 @@ using CSharpPaxosRuntime.Roles.RolesGeneric;
 
 namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
 {
-    public class VoteRequestMessageStrategy : IMessageStrategy
+    public class SendVoteStrategy : IMessageStrategy
     {
         private readonly IMessageBroker broker;
-        public VoteRequestMessageStrategy(IMessageBroker broker)
+        public SendVoteStrategy(IMessageBroker broker)
         {
             this.broker = broker;
         }
@@ -18,22 +18,16 @@ namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
         {
             checkInvalidParameter(obj);
             VoteRequest request = (obj.Message as VoteRequest);
-            AcceptorState state = obj.ActorState as AcceptorState;
-            VoteStatus voteStatus;
+            AcceptorState state = obj.RoleState as AcceptorState;
 
-            if (this.ballotIsValid(request.BallotNumber, state.BallotNumber))
+            if (ballotIsValid(request.BallotNumber, state.BallotNumber))
             {
                 acceptVote(request, state);
-                voteStatus = VoteStatus.Accepted;
             }
             else
             {
-                rejectVote();
-                voteStatus = VoteStatus.Rejected;
+                rejectVote(request, state);
             }
-
-            VoteResponse response = generateVoteResponse(state, request, voteStatus);
-            sendVoteResponse(request.MessageSender, response);
         }
 
         private void sendVoteResponse(MessageSender sendTo, VoteResponse response)
@@ -53,7 +47,12 @@ namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
             return response;
         }
 
-        private void rejectVote() { }
+        private void rejectVote(VoteRequest request, AcceptorState state)
+        {
+            VoteStatus voteStatus = VoteStatus.Rejected;
+            VoteResponse response = generateVoteResponse(state, request, voteStatus);
+            sendVoteResponse(request.MessageSender, response);
+        }
 
         private void acceptVote(VoteRequest request, AcceptorState state)
         {
@@ -63,7 +62,11 @@ namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
                 SlotNumber = request.SlotNumber,
                 Command = request.Command
             };
-            state.AcceptedDecisions.Add(vote);
+            state.AcceptedDecision = vote;
+
+            VoteStatus voteStatus = VoteStatus.Accepted;
+            VoteResponse response = generateVoteResponse(state, request, voteStatus);
+            sendVoteResponse(request.MessageSender, response);
         }
 
         private bool ballotIsValid(BallotNumber ballotNumber1, BallotNumber ballotNumber2)
@@ -78,7 +81,7 @@ namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
                 throw new MessageStrategyException("This strategy shouldn't be invoked with this message type");
             }
 
-            if (!(obj.ActorState is AcceptorState))
+            if (!(obj.RoleState is AcceptorState))
             {
                 throw new MessageStrategyException("This strategy should only be executed by an acceptor");
             }

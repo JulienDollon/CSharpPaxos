@@ -6,7 +6,6 @@ using CSharpPaxosRuntime.Models;
 using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Roles.Acceptor;
 using CSharpPaxosRuntime.Roles.RolesGeneric;
-using CSharpPaxosRuntime.Utils.Log;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
@@ -17,14 +16,13 @@ namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
 
         public static Acceptor GetAcceptorWithNoMocks()
         {
-            ILogger logger = new DebugModeLogger();
             IMessageReceiver receiver = new MessageReceiver();
 
-            PaxosActorLoopMessageListener loopListener = new PaxosActorLoopMessageListener();
-            Acceptor acceptor = new Acceptor(logger, receiver, loopListener, MessageBroker);
+            PaxosRoleLoopMessageListener loopListener = new PaxosRoleLoopMessageListener();
+            Acceptor acceptor = new Acceptor(receiver, loopListener, MessageBroker);
 
-            Assert.IsNotNull(acceptor.ActorState);
-            Assert.IsNotNull(acceptor.ActorState.MessageSender);
+            Assert.IsNotNull(acceptor.RoleState);
+            Assert.IsNotNull(acceptor.RoleState.MessageSender);
             Assert.IsNotNull(acceptor.MessageReceiver);
             return acceptor;
         }
@@ -76,7 +74,7 @@ namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
             MessageReceiver testReceiver = new MessageReceiver();
             SubscribeToBroker(testReceiver);
 
-            MessageBroker.SendMessage(acceptor.ActorState.MessageSender.UniqueId, request);
+            MessageBroker.SendMessage(acceptor.RoleState.MessageSender.UniqueId, request);
             Thread.Sleep(50);
 
             SolicitateBallotResponse response = testReceiver.GetLastMessage() as SolicitateBallotResponse;
@@ -89,7 +87,7 @@ namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
             MessageReceiver testReceiver = new MessageReceiver();
             SubscribeToBroker(testReceiver);
 
-            MessageBroker.SendMessage(acceptor.ActorState.MessageSender.UniqueId, request);
+            MessageBroker.SendMessage(acceptor.RoleState.MessageSender.UniqueId, request);
             Thread.Sleep(50);
 
             VoteResponse response = testReceiver.GetLastMessage() as VoteResponse;

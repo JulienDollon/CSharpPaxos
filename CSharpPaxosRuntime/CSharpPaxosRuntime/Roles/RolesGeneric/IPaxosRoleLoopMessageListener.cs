@@ -5,7 +5,7 @@ using CSharpPaxosRuntime.Utils;
 
 namespace CSharpPaxosRuntime.Roles.RolesGeneric
 {
-    public interface IPaxosActorLoopMessageListener : IStrategy
+    public interface IPaxosRoleLoopMessageListener : IStrategy
     {
         void Initialize(IMessageReceiver MessageReceiver,
                         Action<IMessage> OnMessageDequeued,

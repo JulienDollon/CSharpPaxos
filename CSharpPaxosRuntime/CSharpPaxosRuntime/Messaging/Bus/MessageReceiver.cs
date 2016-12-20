@@ -1,4 +1,5 @@
 ﻿using CSharpPaxosRuntime.Utils;
+using CSharpPaxosRuntime.Utils.DataStructures;
 
 namespace CSharpPaxosRuntime.Messaging.Bus
 {

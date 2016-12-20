@@ -5,23 +5,18 @@ using CSharpPaxosRuntime.Models;
 using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies;
 using CSharpPaxosRuntime.Roles.RolesGeneric;
-using CSharpPaxosRuntime.Utils.Log;
-
 namespace CSharpPaxosRuntime.Roles.Acceptor
 {
-    public class Acceptor : IPaxosActor
+    public class Acceptor : IPaxosRole
     {
-        private ILogger logger;
-        private readonly IPaxosActorLoopMessageListener loopListener;
+        private readonly IPaxosRoleLoopMessageListener loopListener;
         private AcceptorState currentAcceptorState;
         private StrategyContainer strategyContainer;
 
-        public Acceptor(ILogger logger, 
-                        IMessageReceiver receiver, 
-                        IPaxosActorLoopMessageListener loopListener,
+        public Acceptor(IMessageReceiver receiver, 
+                        IPaxosRoleLoopMessageListener loopListener,
                         IMessageBroker messageBroker)
         {
-            this.logger = logger;
             this.MessageReceiver = receiver;
             this.loopListener = loopListener;
             this.MessageBroker = messageBroker;
@@ -56,10 +51,10 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
         {
             this.strategyContainer = new StrategyContainer();
             this.strategyContainer.AddStrategy(typeof(SolicitateBallotRequest), 
-                new SolicitateBallotRequestMessageStrategy(this.MessageBroker));
+                new SendUpdatedBallotNumberStrategy(this.MessageBroker));
 
             this.strategyContainer.AddStrategy(typeof(VoteRequest),
-                new VoteRequestMessageStrategy(this.MessageBroker));
+                new SendVoteStrategy(this.MessageBroker));
         }
 
         public void Start()
@@ -77,7 +72,7 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
             this.strategyContainer.ExecuteStrategy(lastMessage, this.currentAcceptorState);
         }
 
-        public IPaxosActorState ActorState => currentAcceptorState;
+        public IPaxosRoleState RoleState => currentAcceptorState;
         public IMessageReceiver MessageReceiver { get; set; }
         public IMessageBroker MessageBroker { get; }
     }

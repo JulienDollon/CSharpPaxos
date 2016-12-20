@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
-using CSharpPaxosRuntime.Utils.Log;
 
-namespace CSharpPaxosRuntime.Utils
+namespace CSharpPaxosRuntime.Utils.DataStructures
 {
     public class FixedSizedQueue<T>
     {
@@ -27,7 +26,6 @@ namespace CSharpPaxosRuntime.Utils
             {
                 T outObj;
                 queue.TryDequeue(out outObj);
-                LoggerSingleton.Instance.Log(Severity.Info, "Messages lost, max size of the queue reached");
             }
         }
     }

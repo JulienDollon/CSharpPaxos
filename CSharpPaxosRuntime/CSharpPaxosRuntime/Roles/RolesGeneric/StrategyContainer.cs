@@ -18,7 +18,7 @@ namespace CSharpPaxosRuntime.Roles.RolesGeneric
 
         private readonly Dictionary<Type, IMessageStrategy> messageStrategies;
 
-        public void ExecuteStrategy(IMessage message, IPaxosActorState currentState)
+        public void ExecuteStrategy(IMessage message, IPaxosRoleState currentState)
         {
             IMessageStrategy messageStrategy = this.RetrieveMessageStrategy(message);
             if (messageStrategy == null)
@@ -28,7 +28,7 @@ namespace CSharpPaxosRuntime.Roles.RolesGeneric
 
             MessageStrategyExecuteArg<IMessage> arg = new MessageStrategyExecuteArg<IMessage>
             {
-                ActorState = currentState,
+                RoleState = currentState,
                 Message = message
             };
             messageStrategy.Execute(arg);

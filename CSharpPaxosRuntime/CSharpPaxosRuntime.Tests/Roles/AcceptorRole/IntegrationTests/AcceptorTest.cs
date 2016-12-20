@@ -57,7 +57,7 @@ namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
             VoteResponse response = AcceptorTestUtil.SendVoteRequest(acceptor, request, number);
 
             Assert.AreEqual(response.VoteStatus, VoteStatus.Accepted);
-            Assert.AreEqual((acceptor.ActorState as AcceptorState).AcceptedDecisions.Count, 1);
+            Assert.IsNotNull((acceptor.RoleState as AcceptorState).AcceptedDecision);
         }
 
         [TestMethod]
@@ -80,8 +80,8 @@ namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
 
             Assert.IsNotNull(response);
             Assert.AreEqual(response.BallotNumber, expectBallotNumber);
-            Assert.AreEqual(response.MessageSender.UniqueId, acceptor.ActorState.MessageSender.UniqueId);
-            Assert.AreEqual((acceptor.ActorState as AcceptorState).BallotNumber, expectBallotNumber);
+            Assert.AreEqual(response.MessageSender.UniqueId, acceptor.RoleState.MessageSender.UniqueId);
+            Assert.AreEqual((acceptor.RoleState as AcceptorState).BallotNumber, expectBallotNumber);
         }
     }
 }
