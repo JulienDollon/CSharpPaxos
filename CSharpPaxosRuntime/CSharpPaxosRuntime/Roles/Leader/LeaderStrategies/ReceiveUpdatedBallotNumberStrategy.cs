@@ -13,8 +13,8 @@ namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
 {
     public class ReceiveUpdatedBallotNumberStrategy : IMessageStrategy
     {
-        public event EventHandler OnBallotAdopted;
-        public event EventHandler OnBallotRejected;
+        public event EventHandler BallotRejected;
+        public event EventHandler BallotApproved;
 
         public void Execute(MessageStrategyExecuteArg<IMessage> obj)
         {
@@ -47,13 +47,14 @@ namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
             storePreviousAcceptedValuesFromAcceptors(state, response.Decision);
             if (majorityOfAcceptorsReplied(state))
             {
-                OnBallotAdopted?.Invoke(this, EventArgs.Empty);
+                state.BallotStatus = BallotStatus.Adopted;
+                BallotApproved?.Invoke(this, EventArgs.Empty);
             }
         }
 
         private bool majorityOfAcceptorsReplied(LeaderState state)
         {
-            return state.WaitingFor.Count < state.Acceptors.Count / 2;
+            return state.BallotRequestPendingDecisionByAcceptors.Count < state.Acceptors.Count / 2;
         }
 
         private void storePreviousAcceptedValuesFromAcceptors(LeaderState state, VoteDecision responseDecision)
@@ -63,25 +64,26 @@ namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
 
         private void removeAcceptorFromWaitingQueue(LeaderState state, MessageSender acceptor)
         {
-            state.WaitingFor.Remove(acceptor);
+            state.BallotRequestPendingDecisionByAcceptors.Remove(acceptor);
         }
 
         private void onBallotRejected(LeaderState state, SolicitateBallotResponse response)
         {
             updateBallotNumber(state, response);
             clearState(state);
-            OnBallotRejected?.Invoke(this, EventArgs.Empty);
+            state.BallotStatus = BallotStatus.Rejected;
+            BallotRejected?.Invoke(this, EventArgs.Empty);
         }
 
         private void clearState(LeaderState state)
         {
-            state.WaitingFor.Clear();
+            state.BallotRequestPendingDecisionByAcceptors.Clear();
             state.ValuesAcceptedByAcceptors.Clear();
         }
 
         private void updateBallotNumber(LeaderState state, SolicitateBallotResponse response)
         {
-            state.BallotNumber = response.BallotNumber;
+            state.BallotNumber = response.BallotNumber.Increment();
         }
 
         private bool ballotIsApproved(BallotNumber stateBallotNumber, BallotNumber responseBallotNumber)

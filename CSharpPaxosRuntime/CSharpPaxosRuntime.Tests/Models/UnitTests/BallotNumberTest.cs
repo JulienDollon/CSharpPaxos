@@ -20,9 +20,10 @@ namespace CSharpPaxosRuntime.Tests.Models.UnitTests
             try
             {
                 BallotNumber number = BallotNumber.GenerateBallotNumber(10, Int32.MaxValue);
+                int test = number.Value;
                 Assert.Fail();
             }
-            catch (OverflowException e)
+            catch (OverflowException)
             {
             }
         }
@@ -37,6 +38,14 @@ namespace CSharpPaxosRuntime.Tests.Models.UnitTests
             Assert.IsTrue(number == number2);
             Assert.IsTrue(number3 > number2);
             Assert.IsTrue(number2 < number3);
+        }
+
+        [TestMethod]
+        public void Increment()
+        {
+            BallotNumber number = BallotNumber.GenerateBallotNumber(10, 500);
+            number.Increment();
+            Assert.AreEqual(number.Value, 11500);
         }
     }
 }

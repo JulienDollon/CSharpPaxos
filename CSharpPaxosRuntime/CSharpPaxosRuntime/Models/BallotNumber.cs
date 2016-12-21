@@ -13,7 +13,7 @@ namespace CSharpPaxosRuntime.Models
             return Value == other.Value;
         }
 
-        public int Value { get; set; }
+        public int Value => int.Parse(($"{round}{leaderUniqueId}"));
 
         public static bool operator >(BallotNumber c1, BallotNumber c2)
         {
@@ -39,16 +39,33 @@ namespace CSharpPaxosRuntime.Models
         {
             return new BallotNumber()
                 {
-                    Value = int.Parse(($"{round}{leaderUniqueId}"))
+                    round = round,
+                    leaderUniqueId = leaderUniqueId
                 };
         }
+
+        private int round;
+        private int leaderUniqueId;
 
         public static BallotNumber Empty()
         {
             return new BallotNumber()
             {
-                Value = 0
+                round = 0,
+                leaderUniqueId = 0
             };
+        }
+
+        public BallotNumber Increment()
+        {
+            this.round++;
+            return this;
+        }
+
+        public BallotNumber Decrement()
+        {
+            this.round--;
+            return this;
         }
     }
 }

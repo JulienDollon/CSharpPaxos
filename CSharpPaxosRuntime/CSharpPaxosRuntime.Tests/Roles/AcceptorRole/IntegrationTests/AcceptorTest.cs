@@ -44,7 +44,7 @@ namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
             BallotNumber number = BallotNumber.GenerateBallotNumber(10, 10);
             tryAcquireBallot(number, number);
 
-            BallotNumber invalidNumber = new BallotNumber() { Value = number.Value - 1 };
+            BallotNumber invalidNumber = number.Decrement();
             tryAcquireBallot(invalidNumber, number);
         }
 
@@ -66,7 +66,7 @@ namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
             BallotNumber number = BallotNumber.GenerateBallotNumber(10, 10);
             tryAcquireBallot(number, number);
 
-            BallotNumber invalidNumber = new BallotNumber() { Value = number.Value - 1 };
+            BallotNumber invalidNumber = number.Decrement();
             VoteRequest request = AcceptorTestUtil.GenerateVoteRequest(invalidNumber);
             VoteResponse response = AcceptorTestUtil.SendVoteRequest(acceptor, request, number);
 

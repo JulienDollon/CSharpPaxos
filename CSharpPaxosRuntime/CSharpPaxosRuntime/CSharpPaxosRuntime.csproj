@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Environment\TimeOut.cs" />
     <Compile Include="Models\BallotStatus.cs" />
     <Compile Include="Models\Properties\IBallotNumberProperty.cs" />
     <Compile Include="Messaging\Bus\IMessageBroker.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Roles\Leader\LeaderState.cs" />
     <Compile Include="Roles\Leader\LeaderStrategies\ReceiveUpdatedBallotNumberStrategy.cs" />
     <Compile Include="Roles\Leader\LeaderStrategies\RequestBallotStrategy.cs" />
+    <Compile Include="Roles\Leader\LeaderStrategies\SendVoteRequestStrategy.cs" />
     <Compile Include="Roles\RolesGeneric\IPaxosRoleLoopMessageListener.cs" />
     <Compile Include="Roles\RolesGeneric\StrategyContainer.cs" />
     <Compile Include="Roles\RolesGeneric\IMessageStrategy.cs" />
