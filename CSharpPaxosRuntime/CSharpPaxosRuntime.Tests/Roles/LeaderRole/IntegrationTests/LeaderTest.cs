@@ -1,11 +1,11 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
- using CSharpPaxosRuntime.Environment;
- using CSharpPaxosRuntime.Messaging.Bus;
+using CSharpPaxosRuntime.Environment;
+using CSharpPaxosRuntime.Messaging.Bus;
 using CSharpPaxosRuntime.Models;
 using CSharpPaxosRuntime.Roles.Acceptor;
 using CSharpPaxosRuntime.Roles.Leader;
