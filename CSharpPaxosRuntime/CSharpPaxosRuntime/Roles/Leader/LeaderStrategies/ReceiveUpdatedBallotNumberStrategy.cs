@@ -59,7 +59,10 @@ namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
 
         private void storePreviousAcceptedValuesFromAcceptors(LeaderState state, VoteDecision responseDecision)
         {
-            state.ValuesAcceptedByAcceptors.Add(responseDecision);
+            if (responseDecision != null)
+            {
+                state.ValuesAcceptedByAcceptors.Add(responseDecision);
+            }
         }
 
         private void removeAcceptorFromWaitingQueue(LeaderState state, MessageSender acceptor)

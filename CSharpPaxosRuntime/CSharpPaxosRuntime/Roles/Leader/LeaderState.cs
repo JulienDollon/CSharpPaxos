@@ -26,6 +26,7 @@ namespace CSharpPaxosRuntime.Roles.Leader
         public BallotNumber BallotNumber { get; set; }
         public BallotStatus BallotStatus { get; set; }
         public List<MessageSender> Acceptors { get; set; }
+        public List<MessageSender> Replicas { get; set; }
         public List<MessageSender> BallotRequestPendingDecisionByAcceptors { get; set; }
         public List<MessageSender> VoteRequestPendingDecisionByAcceptors { get; set; }
         public List<VoteDecision> ValuesAcceptedByAcceptors { get; set; }

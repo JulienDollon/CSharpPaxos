@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CSharpPaxosRuntime.Environment;
 
-namespace CSharpPaxosRuntime.Environment
+namespace CSharpPaxosRuntime.Tests
 {
-    public class TimeOut : ITimeOut
+    class FakeTimeOut : ITimeOut
     {
         private readonly int DefaultTimeOut = 1;
-        private readonly int IncreaseMultiplierTimeOut = 2;
-        private readonly int MaxTimeOut = 200;
+        private readonly int IncreaseMultiplierTimeOut = 1000;
+        private readonly int MaxTimeOut = 10000;
 
         private int value;
 
-        public TimeOut()
+        public FakeTimeOut()
         {
             ResetToDefault();
         }

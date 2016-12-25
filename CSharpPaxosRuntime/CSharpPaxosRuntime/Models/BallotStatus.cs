@@ -8,6 +8,6 @@ namespace CSharpPaxosRuntime.Models
 {
     public enum BallotStatus
     {
-        Adopted, Rejected
+        Adopted, Rejected, Undetermined
     }
 }

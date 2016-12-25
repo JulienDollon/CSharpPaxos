@@ -52,6 +52,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FakeMessageReceiver.cs" />
+    <Compile Include="FakeTimeOut.cs" />
     <Compile Include="Roles\AcceptorRole\IntegrationTests\AcceptorTest.cs" />
     <Compile Include="Models\UnitTests\BallotNumberTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

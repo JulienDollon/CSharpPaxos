@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using CSharpPaxosRuntime.Messaging;
 using CSharpPaxosRuntime.Messaging.Bus;
@@ -12,14 +13,12 @@ namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
 {
     public static class AcceptorTestUtil
     {
-        public static readonly IMessageBroker MessageBroker = new ObjectsMessageBroker();
-
-        public static Acceptor GetAcceptorWithNoMocks()
+        public static Acceptor GetAcceptorWithNoMocks(IMessageBroker broker)
         {
             IMessageReceiver receiver = new MessageReceiver();
 
             PaxosRoleLoopMessageListener loopListener = new PaxosRoleLoopMessageListener();
-            Acceptor acceptor = new Acceptor(receiver, loopListener, MessageBroker);
+            Acceptor acceptor = new Acceptor(receiver, loopListener, broker);
 
             Assert.IsNotNull(acceptor.RoleState);
             Assert.IsNotNull(acceptor.RoleState.MessageSender);
@@ -27,9 +26,9 @@ namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
             return acceptor;
         }
 
-        public static Acceptor GetAcceptorWithNoMocksRunning()
+        public static Acceptor GetAcceptorWithNoMocksRunning(IMessageBroker broker)
         {
-            Acceptor acceptor = AcceptorTestUtil.GetAcceptorWithNoMocks();
+            Acceptor acceptor = AcceptorTestUtil.GetAcceptorWithNoMocks(broker);
 
             Task t = Task.Run(() => {
                 acceptor.Start();
@@ -58,23 +57,23 @@ namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
             return request;
         }
 
-        public static void SubscribeToBroker(MessageReceiver testReceiver)
+        public static void SubscribeToBroker(MessageReceiver testReceiver, IMessageBroker broker)
         {
-            MessageBroker.AddReceiver("FAKE", testReceiver);
+            broker.AddReceiver("FAKE", testReceiver);
         }
 
-        public static void CleanBrokerSubscription()
+        public static void CleanBrokerSubscription(IMessageBroker broker)
         {
-            MessageBroker.RemoveReceiver("FAKE");
+            broker.RemoveReceiver("FAKE");
         }
 
-        public static SolicitateBallotResponse SendSolicitateBallotRequest(Acceptor acceptor, BallotNumber ballotNumber)
+        public static SolicitateBallotResponse SendSolicitateBallotRequest(Acceptor acceptor, BallotNumber ballotNumber, IMessageBroker broker)
         {
             IMessage request = AcceptorTestUtil.GenerateSolicitateBallotRequest(ballotNumber);
             MessageReceiver testReceiver = new MessageReceiver();
-            SubscribeToBroker(testReceiver);
+            SubscribeToBroker(testReceiver, broker);
 
-            MessageBroker.SendMessage(acceptor.RoleState.MessageSender.UniqueId, request);
+            broker.SendMessage(acceptor.RoleState.MessageSender.UniqueId, request);
             Thread.Sleep(50);
 
             SolicitateBallotResponse response = testReceiver.GetLastMessage() as SolicitateBallotResponse;
@@ -82,16 +81,25 @@ namespace CSharpPaxosRuntime.Tests.Roles.AcceptorRole.IntegrationTests
             return response;
         }
 
-        public static VoteResponse SendVoteRequest(Acceptor acceptor, VoteRequest request, BallotNumber ballotNumber)
+        public static VoteResponse SendVoteRequest(Acceptor acceptor, VoteRequest request, BallotNumber ballotNumber, IMessageBroker broker)
         {
             MessageReceiver testReceiver = new MessageReceiver();
-            SubscribeToBroker(testReceiver);
+            SubscribeToBroker(testReceiver, broker);
 
-            MessageBroker.SendMessage(acceptor.RoleState.MessageSender.UniqueId, request);
+            broker.SendMessage(acceptor.RoleState.MessageSender.UniqueId, request);
             Thread.Sleep(50);
 
             VoteResponse response = testReceiver.GetLastMessage() as VoteResponse;
             return response;
+        }
+
+        public static void StopAcceptors(List<Acceptor> acceptors)
+        {
+            foreach (Acceptor acceptor in acceptors)
+            {
+                acceptor.Stop();
+            }
+            Thread.Sleep(10);
         }
     }
 }

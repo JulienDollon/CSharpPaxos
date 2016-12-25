@@ -10,6 +10,10 @@ namespace CSharpPaxosRuntime.Models
     {
         protected bool Equals(BallotNumber other)
         {
+            if (other == null)
+            {
+                return false;
+            }
             return Value == other.Value;
         }
 
@@ -27,12 +31,17 @@ namespace CSharpPaxosRuntime.Models
 
         public static bool operator ==(BallotNumber c1, BallotNumber c2)
         {
-            return c1.Value == c2.Value;
+            if (object.ReferenceEquals(c1, null))
+            {
+                return object.ReferenceEquals(c2, null);
+            }
+
+            return c1.Equals(c2);
         }
 
         public static bool operator !=(BallotNumber c1, BallotNumber c2)
         {
-            return c1.Value == c2.Value;
+            return !(c1 == c2);
         }
 
         public static BallotNumber GenerateBallotNumber(int round, int leaderUniqueId)

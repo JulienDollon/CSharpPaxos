@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpPaxosRuntime.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpPaxosRuntime", "CSharpPaxosRuntime\CSharpPaxosRuntime.csproj", "{FEFC22DD-03CF-4DEB-A471-CC26E8670812}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpPaxosRuntime.Networking", "CSharpPaxosRuntime.Networking\CSharpPaxosRuntime.Networking.csproj", "{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,22 +51,6 @@ Global
 		{FEFC22DD-03CF-4DEB-A471-CC26E8670812}.Release|x64.Build.0 = Release|Any CPU
 		{FEFC22DD-03CF-4DEB-A471-CC26E8670812}.Release|x86.ActiveCfg = Release|Any CPU
 		{FEFC22DD-03CF-4DEB-A471-CC26E8670812}.Release|x86.Build.0 = Release|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Debug|ARM.Build.0 = Debug|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Debug|x64.Build.0 = Debug|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Debug|x86.Build.0 = Debug|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Release|ARM.ActiveCfg = Release|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Release|ARM.Build.0 = Release|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Release|x64.ActiveCfg = Release|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Release|x64.Build.0 = Release|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Release|x86.ActiveCfg = Release|Any CPU
-		{DCE5D686-DC58-4A88-ABAA-3510D40FC7B2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

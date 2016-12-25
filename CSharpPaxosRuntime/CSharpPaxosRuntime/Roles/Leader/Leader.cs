@@ -19,20 +19,21 @@ namespace CSharpPaxosRuntime.Roles.Leader
         private readonly int defaultRound = 0;
         private readonly IPaxosRoleLoopMessageListener loopListener;
         private StrategyContainer strategyContainer;
-        private TimeOut timeToWaitBetweenOperations;
+        private readonly ITimeOut timeToWaitBetweenOperations;
 
         public Leader(IMessageReceiver receiver,
                 IPaxosRoleLoopMessageListener loopListener,
                 IMessageBroker messageBroker,
                 List<MessageSender> acceptors,
-                TimeOut timeToWaitBetweenOperations)
+                List<MessageSender> replicas,
+                ITimeOut timeToWaitBetweenOperations)
         {
             this.MessageReceiver = receiver;
             this.loopListener = loopListener;
             this.MessageBroker = messageBroker;
             this.timeToWaitBetweenOperations = timeToWaitBetweenOperations;
 
-            this.initializeState(acceptors);
+            this.initializeState(acceptors, replicas);
             this.initializeLoopListener();
             this.defineSupportedMessage();
         }
@@ -41,15 +42,34 @@ namespace CSharpPaxosRuntime.Roles.Leader
         {
             this.strategyContainer = new StrategyContainer();
             this.strategyContainer.AddStrategy(typeof(SolicitateBallotRequest),
-                new RequestBallotStrategy(this.MessageBroker));
-
-            this.strategyContainer.AddStrategy(typeof(VoteRequest),
-                new SendRequestToAcceptorsStrategy(this.MessageBroker));
+                new SendSolicitateBallotRequestStrategy(this.MessageBroker));
 
             ReceiveUpdatedBallotNumberStrategy receiveUpdatedBallot = new ReceiveUpdatedBallotNumberStrategy();
             receiveUpdatedBallot.BallotRejected += onBallotRejected;
             receiveUpdatedBallot.BallotApproved += onBallotApproved;
             this.strategyContainer.AddStrategy(typeof(SolicitateBallotResponse), receiveUpdatedBallot);
+
+            this.strategyContainer.AddStrategy(typeof(VoteRequest),
+                new SendVoteRequestStrategy(this.MessageBroker));
+
+            ReceiveVoteResponseStrategy receiveVote = new ReceiveVoteResponseStrategy();
+            receiveVote.OnApprovalPreempted += onBallotRejected;
+            receiveVote.OnApprovalElected += onApprovalElected;
+            this.strategyContainer.AddStrategy(typeof(VoteResponse), receiveVote);
+        }
+
+        private void onApprovalElected(object sender, IMessage message)
+        {
+            cleanProposals();
+            notifyAllReplicasOfElectedValue(message);
+        }
+
+        private void notifyAllReplicasOfElectedValue(IMessage message)
+        {
+            foreach (MessageSender replica in this.currentState.Replicas)
+            {
+                this.MessageBroker.SendMessage(replica.UniqueId, message);
+            }
         }
 
         private void onBallotApproved(object sender, EventArgs e)
@@ -99,6 +119,7 @@ namespace CSharpPaxosRuntime.Roles.Leader
 
         private void onBallotRejected(object sender, EventArgs eventArgs)
         {
+            currentState.BallotStatus = BallotStatus.Rejected;
             exponentionalBackoff();
             solicitateBallot();
         }
@@ -117,7 +138,7 @@ namespace CSharpPaxosRuntime.Roles.Leader
                  this.RoleState.MessageSender);
         }
 
-        private void initializeState(List<MessageSender> acceptors)
+        private void initializeState(List<MessageSender> acceptors, List<MessageSender> replicas)
         {
             int uniqueId = this.GetHashCode();
             this.currentState = new LeaderState
@@ -126,9 +147,10 @@ namespace CSharpPaxosRuntime.Roles.Leader
                 {
                     UniqueId = uniqueId.ToString()
                 },
-                BallotStatus = BallotStatus.Rejected,
+                BallotStatus = BallotStatus.Undetermined,
                 BallotNumber = BallotNumber.GenerateBallotNumber(defaultRound, uniqueId),
                 Acceptors = acceptors,
+                Replicas = replicas
             };
         }
 

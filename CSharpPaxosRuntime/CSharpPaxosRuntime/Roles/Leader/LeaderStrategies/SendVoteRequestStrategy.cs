@@ -10,10 +10,10 @@ using CSharpPaxosRuntime.Roles.RolesGeneric;
 
 namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
 {
-    public class SendRequestToAcceptorsStrategy : IMessageStrategy
+    public class SendVoteRequestStrategy : IMessageStrategy
     {
         private readonly IMessageBroker broker;
-        public SendRequestToAcceptorsStrategy(IMessageBroker broker)
+        public SendVoteRequestStrategy(IMessageBroker broker)
         {
             this.broker = broker;
         }
