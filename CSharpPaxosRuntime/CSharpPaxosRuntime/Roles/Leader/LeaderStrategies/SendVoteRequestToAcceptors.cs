@@ -10,31 +10,31 @@ using CSharpPaxosRuntime.Roles.RolesGeneric;
 
 namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
 {
-    public class SendSolicitateBallotRequestStrategy : IMessageStrategy
+    public class SendVoteRequestToAcceptors : IMessageStrategy
     {
         private readonly IMessageBroker broker;
-        public SendSolicitateBallotRequestStrategy(IMessageBroker broker)
+        public SendVoteRequestToAcceptors(IMessageBroker broker)
         {
             this.broker = broker;
         }
 
         public void Execute(MessageStrategyExecuteArg<IMessage> obj)
         {
-            if (!(obj.Message is SolicitateBallotRequest))
+            if (!(obj.Message is VoteRequest))
             {
                 throw new MessageStrategyException("This strategy shouldn't be invoked with this message type");
             }
 
-            SolicitateBallotRequest request = obj.Message as SolicitateBallotRequest;
+            VoteRequest request = obj.Message as VoteRequest;
             sendRequestToAcceptors(obj.RoleState as LeaderState, request);
         }
 
-        private void sendRequestToAcceptors(LeaderState state, SolicitateBallotRequest objMessage)
+        private void sendRequestToAcceptors(LeaderState state, VoteRequest objMessage)
         {
-            state.BallotRequestPendingDecisionByAcceptors.Clear();
+            state.VoteRequestPendingDecisionPerSlot[objMessage.SlotNumber] = new List<MessageSender>();
             foreach (MessageSender acceptor in state.Acceptors)
             {
-                state.BallotRequestPendingDecisionByAcceptors.Add(acceptor);
+                state.VoteRequestPendingDecisionPerSlot[objMessage.SlotNumber].Add(acceptor);
                 broker.SendMessage(acceptor.UniqueId, objMessage);
             }
         }

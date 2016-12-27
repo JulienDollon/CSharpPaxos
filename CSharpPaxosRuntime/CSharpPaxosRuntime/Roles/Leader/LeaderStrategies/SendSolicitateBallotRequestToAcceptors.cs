@@ -10,31 +10,31 @@ using CSharpPaxosRuntime.Roles.RolesGeneric;
 
 namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
 {
-    public class SendVoteRequestStrategy : IMessageStrategy
+    public class SendSolicitateBallotRequestToAcceptors : IMessageStrategy
     {
         private readonly IMessageBroker broker;
-        public SendVoteRequestStrategy(IMessageBroker broker)
+        public SendSolicitateBallotRequestToAcceptors(IMessageBroker broker)
         {
             this.broker = broker;
         }
 
         public void Execute(MessageStrategyExecuteArg<IMessage> obj)
         {
-            if (!(obj.Message is VoteRequest))
+            if (!(obj.Message is SolicitateBallotRequest))
             {
                 throw new MessageStrategyException("This strategy shouldn't be invoked with this message type");
             }
 
-            VoteRequest request = obj.Message as VoteRequest;
+            SolicitateBallotRequest request = obj.Message as SolicitateBallotRequest;
             sendRequestToAcceptors(obj.RoleState as LeaderState, request);
         }
 
-        private void sendRequestToAcceptors(LeaderState state, VoteRequest objMessage)
+        private void sendRequestToAcceptors(LeaderState state, SolicitateBallotRequest objMessage)
         {
-            state.VoteRequestPendingDecisionByAcceptors.Clear();
+            state.BallotRequestPendingDecisionByAcceptors.Clear();
             foreach (MessageSender acceptor in state.Acceptors)
             {
-                state.VoteRequestPendingDecisionByAcceptors.Add(acceptor);
+                state.BallotRequestPendingDecisionByAcceptors.Add(acceptor);
                 broker.SendMessage(acceptor.UniqueId, objMessage);
             }
         }

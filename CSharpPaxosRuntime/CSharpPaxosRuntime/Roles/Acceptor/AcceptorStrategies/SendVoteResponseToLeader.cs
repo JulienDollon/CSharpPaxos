@@ -6,10 +6,10 @@ using CSharpPaxosRuntime.Roles.RolesGeneric;
 
 namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
 {
-    public class SendVoteStrategy : IMessageStrategy
+    public class SendVoteResponseToLeader : IMessageStrategy
     {
         private readonly IMessageBroker broker;
-        public SendVoteStrategy(IMessageBroker broker)
+        public SendVoteResponseToLeader(IMessageBroker broker)
         {
             this.broker = broker;
         }
@@ -56,7 +56,7 @@ namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
 
         private void acceptVote(VoteRequest request, AcceptorState state)
         {
-            VoteDecision vote = new VoteDecision
+            Decision vote = new Decision()
             {
                 BallotNumber = request.BallotNumber,
                 SlotNumber = request.SlotNumber,

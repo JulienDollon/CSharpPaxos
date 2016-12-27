@@ -5,10 +5,10 @@ using CSharpPaxosRuntime.Roles.RolesGeneric;
 
 namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
 {
-    public class SendUpdatedBallotNumberStrategy : IMessageStrategy
+    public class SendUpdatedBallotNumberToLeader : IMessageStrategy
     {
         private readonly IMessageBroker broker;
-        public SendUpdatedBallotNumberStrategy(IMessageBroker broker)
+        public SendUpdatedBallotNumberToLeader(IMessageBroker broker)
         {
             this.broker = broker;
         }

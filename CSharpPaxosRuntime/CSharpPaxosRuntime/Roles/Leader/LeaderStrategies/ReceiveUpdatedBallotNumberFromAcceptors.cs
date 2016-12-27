@@ -11,7 +11,7 @@ using CSharpPaxosRuntime.Roles.RolesGeneric;
 
 namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
 {
-    public class ReceiveUpdatedBallotNumberStrategy : IMessageStrategy
+    public class ReceiveUpdatedBallotNumberFromAcceptors : IMessageStrategy
     {
         public event EventHandler BallotRejected;
         public event EventHandler BallotApproved;
@@ -57,7 +57,7 @@ namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
             return state.BallotRequestPendingDecisionByAcceptors.Count < state.Acceptors.Count / 2;
         }
 
-        private void storePreviousAcceptedValuesFromAcceptors(LeaderState state, VoteDecision responseDecision)
+        private void storePreviousAcceptedValuesFromAcceptors(LeaderState state, IDecision responseDecision)
         {
             if (responseDecision != null)
             {

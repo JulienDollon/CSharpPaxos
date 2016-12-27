@@ -42,47 +42,59 @@ namespace CSharpPaxosRuntime.Roles.Leader
         {
             this.strategyContainer = new StrategyContainer();
             this.strategyContainer.AddStrategy(typeof(SolicitateBallotRequest),
-                new SendSolicitateBallotRequestStrategy(this.MessageBroker));
+                new SendSolicitateBallotRequestToAcceptors(this.MessageBroker));
 
-            ReceiveUpdatedBallotNumberStrategy receiveUpdatedBallot = new ReceiveUpdatedBallotNumberStrategy();
+            ReceiveUpdatedBallotNumberFromAcceptors receiveUpdatedBallot = new ReceiveUpdatedBallotNumberFromAcceptors();
             receiveUpdatedBallot.BallotRejected += onBallotRejected;
             receiveUpdatedBallot.BallotApproved += onBallotApproved;
             this.strategyContainer.AddStrategy(typeof(SolicitateBallotResponse), receiveUpdatedBallot);
 
             this.strategyContainer.AddStrategy(typeof(VoteRequest),
-                new SendVoteRequestStrategy(this.MessageBroker));
+                new SendVoteRequestToAcceptors(this.MessageBroker));
 
-            ReceiveVoteResponseStrategy receiveVote = new ReceiveVoteResponseStrategy();
+            ReceiveVoteResponseFromAcceptors receiveVote = new ReceiveVoteResponseFromAcceptors();
             receiveVote.OnApprovalPreempted += onBallotRejected;
             receiveVote.OnApprovalElected += onApprovalElected;
             this.strategyContainer.AddStrategy(typeof(VoteResponse), receiveVote);
+
+            ReceiveProposalRequestFromReplica requestFromReplica = new ReceiveProposalRequestFromReplica();
+            requestFromReplica.OnProposalReceived += onProposalFromReplicaReceived;
+            this.strategyContainer.AddStrategy(typeof(ProposalRequest), requestFromReplica);
+        }
+
+        private void onProposalFromReplicaReceived(object sender, EventArgs eventArgs)
+        {
+            if (this.currentState.BallotStatus == BallotStatus.Adopted)
+            {
+                organizeVote();
+            }
         }
 
         private void onApprovalElected(object sender, IMessage message)
         {
-            cleanProposals();
-            notifyAllReplicasOfElectedValue(message);
+            notifyAllReplicasOfElectedValue(message as VoteResponse);
         }
 
-        private void notifyAllReplicasOfElectedValue(IMessage message)
+        private void notifyAllReplicasOfElectedValue(VoteResponse message)
         {
+            ProposalDecision decision = new ProposalDecision(message);
+            decision.Command = this.currentState.ProposalsBySlotId[message.SlotNumber];
             foreach (MessageSender replica in this.currentState.Replicas)
             {
-                this.MessageBroker.SendMessage(replica.UniqueId, message);
+                this.MessageBroker.SendMessage(replica.UniqueId, decision);
             }
         }
 
         private void onBallotApproved(object sender, EventArgs e)
         {
-            reduceLatency();
-            findPendingProposalsPropagatedByOtherLeaders();
-            sendCurrentAndPendingProposals();
-            cleanProposals();
+            organizeVote();
         }
 
-        private void cleanProposals()
+        private void organizeVote()
         {
-            this.currentState.ProposalsBySlotId.Clear();
+            reduceLatency();
+            updateInMemoryProposals();
+            sendCurrentAndPendingProposals();
         }
 
         private void sendCurrentAndPendingProposals()
@@ -98,17 +110,31 @@ namespace CSharpPaxosRuntime.Roles.Leader
             }
         }
 
-        private void findPendingProposalsPropagatedByOtherLeaders()
+        private void updateInMemoryProposals()
         {
-            Dictionary<int, BallotNumber> highestBallotNumbersPerSlot = new Dictionary<int, BallotNumber>();
-            foreach (VoteDecision voteDecision in this.currentState.ValuesAcceptedByAcceptors)
+            List<IDecision> pendingProposalsPropagatedByOtherLeaders = this.currentState.ValuesAcceptedByAcceptors;
+            Dictionary<int, BallotNumber> highestBallotNumberPerSlot = new Dictionary<int, BallotNumber>();
+
+            foreach (IDecision voteDecision in pendingProposalsPropagatedByOtherLeaders)
             {
-                if (!highestBallotNumbersPerSlot.ContainsKey(voteDecision.SlotNumber) ||
-                    highestBallotNumbersPerSlot[voteDecision.SlotNumber] < voteDecision.BallotNumber)
+                if (!highestBallotNumberPerSlot.ContainsKey(voteDecision.SlotNumber) ||
+                    highestBallotNumberPerSlot[voteDecision.SlotNumber] < voteDecision.BallotNumber)
                 {
-                    highestBallotNumbersPerSlot[voteDecision.SlotNumber] = voteDecision.BallotNumber;
-                    this.currentState.ProposalsBySlotId.Add(voteDecision.SlotNumber, voteDecision.Command);
+                    highestBallotNumberPerSlot[voteDecision.SlotNumber] = voteDecision.BallotNumber;
+                    updateInMemoryProposal(voteDecision.SlotNumber, voteDecision.Command);
                 }
+            }
+        }
+
+        private void updateInMemoryProposal(int slotNumber, ICommand command)
+        {
+            if (!this.currentState.ProposalsBySlotId.ContainsKey(slotNumber))
+            {
+                this.currentState.ProposalsBySlotId.Add(slotNumber, command);
+            }
+            else
+            {
+                this.currentState.ProposalsBySlotId[slotNumber] = command;
             }
         }
 

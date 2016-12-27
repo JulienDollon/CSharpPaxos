@@ -12,7 +12,7 @@ namespace CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes
             set;
         }
 
-        public VoteDecision Decision
+        public IDecision Decision
         {
             get;
             set;

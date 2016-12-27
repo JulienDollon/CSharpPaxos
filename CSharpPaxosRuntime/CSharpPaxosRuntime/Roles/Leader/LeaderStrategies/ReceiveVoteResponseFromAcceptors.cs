@@ -11,7 +11,7 @@ using CSharpPaxosRuntime.Roles.RolesGeneric;
 
 namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
 {
-    public class ReceiveVoteResponseStrategy : IMessageStrategy
+    public class ReceiveVoteResponseFromAcceptors : IMessageStrategy
     {
         public event EventHandler<IMessage> OnApprovalElected;
         public event EventHandler OnApprovalPreempted;
@@ -26,7 +26,7 @@ namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
             VoteResponse response = obj.Message as VoteResponse;
             LeaderState state = obj.RoleState as LeaderState;
 
-            state.VoteRequestPendingDecisionByAcceptors.Remove(response.MessageSender);
+            state.VoteRequestPendingDecisionPerSlot[response.SlotNumber].Remove(response.MessageSender);
 
             if (isBallotValid(response.BallotNumber, state.BallotNumber))
             {
@@ -43,7 +43,7 @@ namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
 
         private bool isElected(VoteResponse response, LeaderState state)
         {
-            return state.VoteRequestPendingDecisionByAcceptors.Count < state.Acceptors.Count / 2;
+            return state.VoteRequestPendingDecisionPerSlot[response.SlotNumber].Count < state.Acceptors.Count / 2;
         }
 
         private bool isBallotValid(BallotNumber responseBallotNumber, BallotNumber stateBallotNumber)

@@ -1,5 +1,6 @@
 ﻿using CSharpPaxosRuntime.Messaging.Bus;
 using CSharpPaxosRuntime.Models;
+using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Models.Properties;
 
 namespace CSharpPaxosRuntime.Roles.Acceptor
@@ -10,6 +11,6 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
 
         public MessageSender MessageSender { get; set; }
 
-        public VoteDecision AcceptedDecision { get; set; }
+        public IDecision AcceptedDecision { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CSharpPaxosRuntime.Environment;
 using CSharpPaxosRuntime.Messaging.Bus;
 using CSharpPaxosRuntime.Models;
+using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Models.Properties;
 
 namespace CSharpPaxosRuntime.Roles.Leader
@@ -17,8 +18,8 @@ namespace CSharpPaxosRuntime.Roles.Leader
         public LeaderState()
         {
             BallotRequestPendingDecisionByAcceptors = new List<MessageSender>();
-            VoteRequestPendingDecisionByAcceptors = new List<MessageSender>();
-            ValuesAcceptedByAcceptors = new List<VoteDecision>();
+            VoteRequestPendingDecisionPerSlot = new Dictionary<int, List<MessageSender>>();
+            ValuesAcceptedByAcceptors = new List<IDecision>();
             ProposalsBySlotId = new Dictionary<int, ICommand>();
         }
 
@@ -28,8 +29,8 @@ namespace CSharpPaxosRuntime.Roles.Leader
         public List<MessageSender> Acceptors { get; set; }
         public List<MessageSender> Replicas { get; set; }
         public List<MessageSender> BallotRequestPendingDecisionByAcceptors { get; set; }
-        public List<MessageSender> VoteRequestPendingDecisionByAcceptors { get; set; }
-        public List<VoteDecision> ValuesAcceptedByAcceptors { get; set; }
+        public Dictionary<int,List<MessageSender>> VoteRequestPendingDecisionPerSlot { get; set; }
+        public List<IDecision> ValuesAcceptedByAcceptors { get; set; }
         public Dictionary<int, ICommand> ProposalsBySlotId { get; set; }
     }
 }

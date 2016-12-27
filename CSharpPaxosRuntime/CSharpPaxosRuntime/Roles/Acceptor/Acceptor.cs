@@ -51,10 +51,10 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
         {
             this.strategyContainer = new StrategyContainer();
             this.strategyContainer.AddStrategy(typeof(SolicitateBallotRequest), 
-                new SendUpdatedBallotNumberStrategy(this.MessageBroker));
+                new SendUpdatedBallotNumberToLeader(this.MessageBroker));
 
             this.strategyContainer.AddStrategy(typeof(VoteRequest),
-                new SendVoteStrategy(this.MessageBroker));
+                new SendVoteResponseToLeader(this.MessageBroker));
         }
 
         public void Start()

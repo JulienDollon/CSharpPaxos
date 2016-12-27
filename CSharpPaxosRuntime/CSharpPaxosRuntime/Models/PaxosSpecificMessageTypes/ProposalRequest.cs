@@ -1,12 +1,15 @@
-﻿using CSharpPaxosRuntime.Messaging;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using CSharpPaxosRuntime.Messaging.Bus;
-using CSharpPaxosRuntime.Models.Properties;
 
 namespace CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes
 {
-    public class VoteResponse : IDecisionMessage
+    public class ProposalRequest : IRequestMessage
     {
-        public BallotNumber BallotNumber
+        public ICommand Command
         {
             get;
             set;
@@ -19,18 +22,6 @@ namespace CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes
         }
 
         public int SlotNumber
-        {
-            get;
-            set;
-        }
-
-        public VoteStatus VoteStatus
-        {
-            get;
-            set;
-        }
-
-        public ICommand Command
         {
             get;
             set;

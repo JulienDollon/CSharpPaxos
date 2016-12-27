@@ -1,7 +1,9 @@
-﻿namespace CSharpPaxosRuntime.Models.Properties
+﻿using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
+
+namespace CSharpPaxosRuntime.Models.Properties
 {
     public interface IDecisionProperty
     {
-        VoteDecision Decision { get; set; }
+        IDecision Decision { get; set; }
     }
 }
