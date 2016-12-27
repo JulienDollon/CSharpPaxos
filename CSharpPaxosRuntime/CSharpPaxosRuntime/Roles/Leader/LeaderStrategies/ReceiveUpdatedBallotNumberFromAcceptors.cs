@@ -57,7 +57,7 @@ namespace CSharpPaxosRuntime.Roles.Leader.LeaderStrategies
             return state.BallotRequestPendingDecisionByAcceptors.Count < state.Acceptors.Count / 2;
         }
 
-        private void storePreviousAcceptedValuesFromAcceptors(LeaderState state, IDecision responseDecision)
+        private void storePreviousAcceptedValuesFromAcceptors(LeaderState state, VoteResponse responseDecision)
         {
             if (responseDecision != null)
             {

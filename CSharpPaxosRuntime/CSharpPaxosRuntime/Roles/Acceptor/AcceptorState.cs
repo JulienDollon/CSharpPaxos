@@ -11,6 +11,6 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
 
         public MessageSender MessageSender { get; set; }
 
-        public IDecision AcceptedDecision { get; set; }
+        public VoteResponse LastAcceptedVote { get; set; }
     }
 }

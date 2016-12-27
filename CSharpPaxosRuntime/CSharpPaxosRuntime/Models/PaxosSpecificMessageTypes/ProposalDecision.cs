@@ -11,7 +11,6 @@ namespace CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes
     {
         public ProposalDecision(IDecisionMessage message)
         {
-            this.BallotNumber = message.BallotNumber;
             this.MessageSender = message.MessageSender;
             this.SlotNumber = message.SlotNumber;
             this.VoteStatus = message.VoteStatus;

@@ -8,7 +8,7 @@ using CSharpPaxosRuntime.Models.Properties;
 
 namespace CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes
 {
-    public interface IDecision : IBallotNumberProperty, ISlotNumberProperty, IVoteStatusProperty, ICommandProperty
+    public interface IDecision : ISlotNumberProperty, IVoteStatusProperty, ICommandProperty
     {
     }
 }

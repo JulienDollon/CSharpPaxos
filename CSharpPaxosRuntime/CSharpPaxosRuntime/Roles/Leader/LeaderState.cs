@@ -19,7 +19,7 @@ namespace CSharpPaxosRuntime.Roles.Leader
         {
             BallotRequestPendingDecisionByAcceptors = new List<MessageSender>();
             VoteRequestPendingDecisionPerSlot = new Dictionary<int, List<MessageSender>>();
-            ValuesAcceptedByAcceptors = new List<IDecision>();
+            ValuesAcceptedByAcceptors = new List<VoteResponse>();
             ProposalsBySlotId = new Dictionary<int, ICommand>();
         }
 
@@ -30,7 +30,7 @@ namespace CSharpPaxosRuntime.Roles.Leader
         public List<MessageSender> Replicas { get; set; }
         public List<MessageSender> BallotRequestPendingDecisionByAcceptors { get; set; }
         public Dictionary<int,List<MessageSender>> VoteRequestPendingDecisionPerSlot { get; set; }
-        public List<IDecision> ValuesAcceptedByAcceptors { get; set; }
+        public List<VoteResponse> ValuesAcceptedByAcceptors { get; set; }
         public Dictionary<int, ICommand> ProposalsBySlotId { get; set; }
     }
 }

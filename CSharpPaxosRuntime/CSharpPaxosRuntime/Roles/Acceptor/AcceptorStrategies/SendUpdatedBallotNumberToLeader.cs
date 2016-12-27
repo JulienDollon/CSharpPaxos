@@ -30,7 +30,7 @@ namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
             {
                 BallotNumber = state.BallotNumber,
                 MessageSender = state.MessageSender,
-                Decision = state.AcceptedDecision
+                Decision = state.LastAcceptedVote
             };
             this.broker.SendMessage(sendTo.UniqueId, response);
         }

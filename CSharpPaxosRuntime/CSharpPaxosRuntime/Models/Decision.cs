@@ -9,7 +9,6 @@ namespace CSharpPaxosRuntime.Models
 {
     public class Decision : IDecision
     {
-        public BallotNumber BallotNumber { get; set; }
         public int SlotNumber { get; set; }
         public VoteStatus VoteStatus { get; set; }
         public ICommand Command { get; set; }

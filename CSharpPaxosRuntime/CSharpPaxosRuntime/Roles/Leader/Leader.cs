@@ -54,7 +54,7 @@ namespace CSharpPaxosRuntime.Roles.Leader
 
             ReceiveVoteResponseFromAcceptors receiveVote = new ReceiveVoteResponseFromAcceptors();
             receiveVote.OnApprovalPreempted += onBallotRejected;
-            receiveVote.OnApprovalElected += onApprovalElected;
+            receiveVote.OnApprovalElected += onProposalElected;
             this.strategyContainer.AddStrategy(typeof(VoteResponse), receiveVote);
 
             ReceiveProposalRequestFromReplica requestFromReplica = new ReceiveProposalRequestFromReplica();
@@ -70,7 +70,7 @@ namespace CSharpPaxosRuntime.Roles.Leader
             }
         }
 
-        private void onApprovalElected(object sender, IMessage message)
+        private void onProposalElected(object sender, IMessage message)
         {
             notifyAllReplicasOfElectedValue(message as VoteResponse);
         }
@@ -94,10 +94,10 @@ namespace CSharpPaxosRuntime.Roles.Leader
         {
             reduceLatency();
             updateInMemoryProposals();
-            sendCurrentAndPendingProposals();
+            sendPendingProposalsToAcceptors();
         }
 
-        private void sendCurrentAndPendingProposals()
+        private void sendPendingProposalsToAcceptors()
         {
             foreach (KeyValuePair<int, ICommand> proposal in this.currentState.ProposalsBySlotId)
             {
@@ -112,10 +112,10 @@ namespace CSharpPaxosRuntime.Roles.Leader
 
         private void updateInMemoryProposals()
         {
-            List<IDecision> pendingProposalsPropagatedByOtherLeaders = this.currentState.ValuesAcceptedByAcceptors;
+            List<VoteResponse> pendingProposalsPropagatedByOtherLeaders = this.currentState.ValuesAcceptedByAcceptors;
             Dictionary<int, BallotNumber> highestBallotNumberPerSlot = new Dictionary<int, BallotNumber>();
 
-            foreach (IDecision voteDecision in pendingProposalsPropagatedByOtherLeaders)
+            foreach (VoteResponse voteDecision in pendingProposalsPropagatedByOtherLeaders)
             {
                 if (!highestBallotNumberPerSlot.ContainsKey(voteDecision.SlotNumber) ||
                     highestBallotNumberPerSlot[voteDecision.SlotNumber] < voteDecision.BallotNumber)

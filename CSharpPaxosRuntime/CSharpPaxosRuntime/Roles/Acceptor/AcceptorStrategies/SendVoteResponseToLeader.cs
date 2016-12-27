@@ -56,13 +56,13 @@ namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
 
         private void acceptVote(VoteRequest request, AcceptorState state)
         {
-            Decision vote = new Decision()
+            VoteResponse vote = new VoteResponse()
             {
                 BallotNumber = request.BallotNumber,
                 SlotNumber = request.SlotNumber,
                 Command = request.Command
             };
-            state.AcceptedDecision = vote;
+            state.LastAcceptedVote = vote;
 
             VoteStatus voteStatus = VoteStatus.Accepted;
             VoteResponse response = generateVoteResponse(state, request, voteStatus);
