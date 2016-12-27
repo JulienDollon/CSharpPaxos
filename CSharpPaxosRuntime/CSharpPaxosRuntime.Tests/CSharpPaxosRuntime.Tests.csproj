@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FakeCommand.cs" />
     <Compile Include="FakeMessageReceiver.cs" />
     <Compile Include="FakeTimeOut.cs" />
     <Compile Include="Roles\AcceptorRole\IntegrationTests\AcceptorTest.cs" />
@@ -60,9 +61,6 @@
     <Compile Include="Roles\AcceptorRole\IntegrationTests\AcceptorTestUtil.cs" />
     <Compile Include="Roles\LeaderRole\IntegrationTests\LeaderTest.cs" />
     <Compile Include="Roles\LeaderRole\IntegrationTests\LeaderTestUtil.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="BasicCase.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharpPaxosRuntime\CSharpPaxosRuntime.csproj">

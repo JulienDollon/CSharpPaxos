@@ -10,13 +10,13 @@ namespace CSharpPaxosRuntime.Tests
 {
     public class FakeMessageReceiver : IMessageReceiver
     {
-        public event EventHandler OnMessageReceived;
+        public event EventHandler<IMessage> OnMessageReceived;
 
         private IMessage message;
-        public void ReceiveMessage(IMessage message)
+        public void ReceiveMessage(IMessage msg)
         {
-            this.message = message;
-            OnMessageReceived?.Invoke(null, null);
+            this.message = msg;
+            OnMessageReceived?.Invoke(null, msg);
         }
 
         public IMessage GetLastMessage()

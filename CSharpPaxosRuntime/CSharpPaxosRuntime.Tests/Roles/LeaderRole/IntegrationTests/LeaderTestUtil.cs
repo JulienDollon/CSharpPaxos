@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CSharpPaxosRuntime.Environment;
+using CSharpPaxosRuntime.Messaging;
 using CSharpPaxosRuntime.Messaging.Bus;
 using CSharpPaxosRuntime.Models;
 using CSharpPaxosRuntime.Roles;
@@ -27,7 +28,7 @@ namespace CSharpPaxosRuntime.Tests.Roles.LeaderRole.IntegrationTests
             return leader;
         }
 
-        public static Leader GetAcceptorWithNoMocksRunning(List<MessageSender> acceptors, List<MessageSender> replicas, IMessageBroker broker, ITimeOut timeout, BallotNumber defaultBallotNumber = null)
+        public static Leader GetAcceptorWithNoMocksRunning(List<MessageSender> acceptors, List<MessageSender> replicas, IMessageBroker broker, ITimeOut timeout, BallotNumber defaultBallotNumber = null, Action callBackBeforeStart = null)
         {
             Leader leader = LeaderTestUtil.GetLeaderWithNoMocks(acceptors, replicas, broker, timeout);
 
@@ -35,6 +36,11 @@ namespace CSharpPaxosRuntime.Tests.Roles.LeaderRole.IntegrationTests
             {
                 LeaderState leaderState = leader.RoleState as LeaderState;
                 leaderState.BallotNumber = defaultBallotNumber;
+            }
+
+            if (callBackBeforeStart != null)
+            {
+                callBackBeforeStart.Invoke();
             }
 
             Task t = Task.Run(() => {
@@ -66,10 +72,10 @@ namespace CSharpPaxosRuntime.Tests.Roles.LeaderRole.IntegrationTests
             return senders;
         }
 
-        public static List<MessageSender> GenerateFakeReplicas(Action actionOnMessage, IMessageBroker broker)
+        public static List<MessageSender> GenerateFakeReplicas(Action<IMessage> actionOnMessage, IMessageBroker broker)
         {
             FakeMessageReceiver receiver = new FakeMessageReceiver();
-            receiver.OnMessageReceived += (sender, args) => actionOnMessage.Invoke();
+            receiver.OnMessageReceived += (sender, message) => actionOnMessage.Invoke(message);
             MessageSender fakeReplica = new MessageSender();
             fakeReplica.UniqueId = "JAKOBI";
             broker.AddReceiver(fakeReplica.UniqueId, receiver);

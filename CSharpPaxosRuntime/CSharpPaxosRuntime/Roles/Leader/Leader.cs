@@ -103,7 +103,7 @@ namespace CSharpPaxosRuntime.Roles.Leader
             Dictionary<int, BallotNumber> highestBallotNumbersPerSlot = new Dictionary<int, BallotNumber>();
             foreach (VoteDecision voteDecision in this.currentState.ValuesAcceptedByAcceptors)
             {
-                if (highestBallotNumbersPerSlot[voteDecision.SlotNumber] == null ||
+                if (!highestBallotNumbersPerSlot.ContainsKey(voteDecision.SlotNumber) ||
                     highestBallotNumbersPerSlot[voteDecision.SlotNumber] < voteDecision.BallotNumber)
                 {
                     highestBallotNumbersPerSlot[voteDecision.SlotNumber] = voteDecision.BallotNumber;
