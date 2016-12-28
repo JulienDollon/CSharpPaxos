@@ -46,6 +46,9 @@
     <Compile Include="Models\BallotStatus.cs" />
     <Compile Include="Models\Decision.cs" />
     <Compile Include="Models\IDecision.cs" />
+    <Compile Include="Models\IStateMachine.cs" />
+    <Compile Include="Models\PaxosSpecificMessageTypes\ClientRequest.cs" />
+    <Compile Include="Models\PaxosSpecificMessageTypes\ClientResponse.cs" />
     <Compile Include="Models\PaxosSpecificMessageTypes\IDecisionMessage.cs" />
     <Compile Include="Models\PaxosSpecificMessageTypes\IRequestMessage.cs" />
     <Compile Include="Models\PaxosSpecificMessageTypes\ProposalDecision.cs" />
@@ -72,6 +75,10 @@
     <Compile Include="Roles\Leader\LeaderStrategies\ReceiveVoteResponseFromAcceptors.cs" />
     <Compile Include="Roles\Leader\LeaderStrategies\SendSolicitateBallotRequestToAcceptors.cs" />
     <Compile Include="Roles\Leader\LeaderStrategies\SendVoteRequestToAcceptors.cs" />
+    <Compile Include="Roles\Replica\Replica.cs" />
+    <Compile Include="Roles\Replica\ReplicaState.cs" />
+    <Compile Include="Roles\Replica\ReplicaStrategies\ReceiveProposalDecisionFromLeader.cs" />
+    <Compile Include="Roles\Replica\ReplicaStrategies\SendProposalRequestToLeaders.cs" />
     <Compile Include="Roles\RolesGeneric\IPaxosRoleLoopMessageListener.cs" />
     <Compile Include="Roles\RolesGeneric\StrategyContainer.cs" />
     <Compile Include="Roles\RolesGeneric\IMessageStrategy.cs" />

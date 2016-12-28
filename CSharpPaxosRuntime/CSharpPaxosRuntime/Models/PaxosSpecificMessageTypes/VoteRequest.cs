@@ -4,7 +4,7 @@ using CSharpPaxosRuntime.Models.Properties;
 
 namespace CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes
 {
-    public class VoteRequest : IRequestMessage, IBallotNumberProperty
+    public class VoteRequest : IRequestMessage, IBallotNumberProperty, ISlotNumberProperty
     {
         public BallotNumber BallotNumber
         {

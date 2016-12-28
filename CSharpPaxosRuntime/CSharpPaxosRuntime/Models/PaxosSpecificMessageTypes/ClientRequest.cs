@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CSharpPaxosRuntime.Messaging.Bus;
-using CSharpPaxosRuntime.Models.Properties;
 
 namespace CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes
 {
-    public class ProposalRequest : IRequestMessage, ISlotNumberProperty
+    public class ClientRequest : IRequestMessage
     {
         public ICommand Command
         {
@@ -17,12 +16,6 @@ namespace CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes
         }
 
         public MessageSender MessageSender
-        {
-            get;
-            set;
-        }
-
-        public int SlotNumber
         {
             get;
             set;

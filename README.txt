@@ -3,7 +3,7 @@ Now I do :) but this mean:
 
 1/ The design isn't good as I discovered paxos as I go. I shouldn't have gone that road (especially mixing strategy/state/roles and messages)
 2/ It should have been done in WCF or on top of existing framework if we wanted something really robust.
-3/ I paid no attention to write proper test code (come on man! I'm doing this over week end!). There is just integration tests.
+3/ I paid no attention to write proper good looking and maintainable test code (come on !! I'm doing this over week end OK! DONT JUDGE ME!), this is why I didn't included them in this repo.
 
 So this is just here for education purposes.
 It's a piece of garbage, but it's working though!
