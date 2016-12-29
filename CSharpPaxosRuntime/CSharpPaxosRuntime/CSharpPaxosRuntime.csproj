@@ -68,6 +68,9 @@
     <Compile Include="Models\ICommand.cs" />
     <Compile Include="Models\VoteStatus.cs" />
     <Compile Include="Roles\Acceptor\AcceptorState.cs" />
+    <Compile Include="Roles\Factories\AcceptorFactory.cs" />
+    <Compile Include="Roles\Factories\LeaderFactory.cs" />
+    <Compile Include="Roles\Factories\ReplicaFactory.cs" />
     <Compile Include="Roles\Leader\Leader.cs" />
     <Compile Include="Roles\Leader\LeaderState.cs" />
     <Compile Include="Roles\Leader\LeaderStrategies\ReceiveProposalRequestFromReplica.cs" />

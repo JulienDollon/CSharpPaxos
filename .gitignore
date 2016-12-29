@@ -6,7 +6,9 @@ CSharpPaxosRuntime/CSharpPaxosRuntime.Tests/bin/
 CSharpPaxosRuntime/CSharpPaxosRuntime.Tests/obj/
 CSharpPaxosRuntime/CSharpPaxosRuntime/obj/
 CSharpPaxosRuntime/CSharpPaxosRuntime/bin/
-
+CSharpPaxosRuntime/CSharpPaxosRuntime.v12.suo
+CSharpPaxosRuntime/CSharpPaxosRuntime.SampleApp/obj/
+CSharpPaxosRuntime/CSharpPaxosRuntime.SampleApp/bin/
 
 # Windows image file caches
 Thumbs.db
