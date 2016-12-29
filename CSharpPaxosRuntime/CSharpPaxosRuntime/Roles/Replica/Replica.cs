@@ -11,11 +11,13 @@ using CSharpPaxosRuntime.Roles.Acceptor;
 using CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies;
 using CSharpPaxosRuntime.Roles.Replica.ReplicaStrategies;
 using CSharpPaxosRuntime.Roles.RolesGeneric;
+using log4net;
 
 namespace CSharpPaxosRuntime.Roles.Replica
 {
     public class Replica : IPaxosRole
     {
+        private static readonly ILog logger = LogManager.GetLogger(typeof(Replica));
         private readonly IPaxosRoleLoopMessageListener loopListener;
         private ReplicaState currentReplicaState;
         private StrategyContainer strategyContainer;
@@ -79,14 +81,26 @@ namespace CSharpPaxosRuntime.Roles.Replica
                 {
                     this.currentReplicaState.LastAppliedSlotToStateMachine++;
                     this.currentReplicaState.StateMachine.Update(this.currentReplicaState.DecisionsBySlotId[i]);
-                    sendDecisionToClient(this.currentReplicaState.ClientsPendingResponseBySlotId[i], VoteStatus.Accepted);
+                    if (currentReplicaIsProposalEmitter(i, this.currentReplicaState.ClientsPendingResponseBySlotId))
+                    {
+                        sendDecisionToClient(this.currentReplicaState.ClientsPendingResponseBySlotId[i],
+                            VoteStatus.Accepted);
+                    }
                 }
             }
         }
 
+        private bool currentReplicaIsProposalEmitter(int slotNumber, Dictionary<int, ClientRequest> clientsPendingResponseBySlotId)
+        {
+            return clientsPendingResponseBySlotId.ContainsKey(slotNumber);
+        }
+
         private void onDecisionRejected(object sender, ClientRequest request)
         {
-            retryToSendProposalToLeaders(request);
+            if (request != null)
+            {
+                retryToSendProposalToLeaders(request);
+            }
         }
 
         private void retryToSendProposalToLeaders(ClientRequest request)
@@ -96,6 +110,10 @@ namespace CSharpPaxosRuntime.Roles.Replica
 
         private void sendDecisionToClient(ClientRequest request, VoteStatus status)
         {
+            if (request.MessageSender == null)
+            {
+                return;
+            }
             ClientResponse response = new ClientResponse();
             response.VoteStatus = status;
             response.MessageSender = this.currentReplicaState.MessageSender;
@@ -110,6 +128,7 @@ namespace CSharpPaxosRuntime.Roles.Replica
             {
                 throw new InvalidOperationException("You need to setup leaders in the replica's state before starting replicas");
             }
+            logger.Info($"{this.currentReplicaState.MessageSender.UniqueId} is starting");
             loopListener.Execute();
         }
 

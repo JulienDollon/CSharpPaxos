@@ -5,10 +5,13 @@ using CSharpPaxosRuntime.Models;
 using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies;
 using CSharpPaxosRuntime.Roles.RolesGeneric;
+using log4net;
+
 namespace CSharpPaxosRuntime.Roles.Acceptor
 {
     public class Acceptor : IPaxosRole
     {
+        private static readonly ILog logger = LogManager.GetLogger(typeof(Acceptor));
         private readonly IPaxosRoleLoopMessageListener loopListener;
         private AcceptorState currentAcceptorState;
         private StrategyContainer strategyContainer;
@@ -59,6 +62,7 @@ namespace CSharpPaxosRuntime.Roles.Acceptor
 
         public void Start()
         {
+            logger.Info($"{this.currentAcceptorState.MessageSender.UniqueId} is starting");
             loopListener.Execute();
         }
 

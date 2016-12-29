@@ -31,10 +31,20 @@ namespace CSharpPaxosRuntime.Roles.Replica.ReplicaStrategies
             }
             else
             {
-                temporaryRemoveClientPendingResponseUntilNextRetry(decision, state);
-                ClientRequest clientRequest = cleanProposal(decision, state);
+                ClientRequest clientRequest = null;
+                if (replicaIsProposalEmitter(decision, state))
+                {
+                    temporaryRemoveClientPendingResponseUntilNextRetry(decision, state);
+                    clientRequest = cleanProposal(decision, state);
+                }
+
                 OnDecisionRejected?.Invoke(this, clientRequest);
             }
+        }
+
+        private bool replicaIsProposalEmitter(ProposalDecision decision, ReplicaState state)
+        {
+            return state.ProposalsRequestsBySlotId.ContainsKey(decision.SlotNumber);
         }
 
         private void temporaryRemoveClientPendingResponseUntilNextRetry(ProposalDecision decision, ReplicaState state)
@@ -51,7 +61,10 @@ namespace CSharpPaxosRuntime.Roles.Replica.ReplicaStrategies
 
         private void storeDecision(ProposalDecision decision, ReplicaState state)
         {
-            state.DecisionsBySlotId.Add(decision.SlotNumber, decision.Command);
+            if (!state.DecisionsBySlotId.ContainsKey(decision.SlotNumber))
+            {
+                state.DecisionsBySlotId.Add(decision.SlotNumber, decision.Command);
+            }
         }
 
         private ClientRequest cleanProposal(ProposalDecision decision, ReplicaState state)

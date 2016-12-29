@@ -2,11 +2,13 @@
 using CSharpPaxosRuntime.Messaging.Bus;
 using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Roles.RolesGeneric;
+using log4net;
 
 namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
 {
     public class SendUpdatedBallotNumberToLeader : IMessageStrategy
     {
+        private static readonly ILog logger = LogManager.GetLogger(typeof(Acceptor));
         private readonly IMessageBroker broker;
         public SendUpdatedBallotNumberToLeader(IMessageBroker broker)
         {
@@ -40,6 +42,7 @@ namespace CSharpPaxosRuntime.Roles.Acceptor.AcceptorStrategies
             if (message.BallotNumber > state.BallotNumber)
             {
                 state.BallotNumber = message.BallotNumber;
+                logger.Info($"{state.MessageSender.UniqueId} elect leader {message.MessageSender.UniqueId}");
             }
         }
 

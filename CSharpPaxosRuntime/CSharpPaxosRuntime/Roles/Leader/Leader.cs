@@ -11,11 +11,13 @@ using CSharpPaxosRuntime.Models;
 using CSharpPaxosRuntime.Models.PaxosSpecificMessageTypes;
 using CSharpPaxosRuntime.Roles.Leader.LeaderStrategies;
 using CSharpPaxosRuntime.Roles.RolesGeneric;
+using log4net;
 
 namespace CSharpPaxosRuntime.Roles.Leader
 {
     public class Leader : IPaxosRole
     {
+        private static readonly ILog logger = LogManager.GetLogger(typeof(Leader));
         private readonly int defaultRound = 0;
         private readonly IPaxosRoleLoopMessageListener loopListener;
         private StrategyContainer strategyContainer;
@@ -66,6 +68,7 @@ namespace CSharpPaxosRuntime.Roles.Leader
         {
             if (this.currentState.BallotStatus == BallotStatus.Adopted)
             {
+                logger.Info($"{this.currentState.MessageSender.UniqueId} received proposal from replica and is organizing an election");
                 organizeVote();
             }
         }
@@ -187,6 +190,7 @@ namespace CSharpPaxosRuntime.Roles.Leader
 
         public void Start()
         {
+            logger.Info($"{this.currentState.MessageSender.UniqueId} is starting");
             solicitateBallot();
             loopListener.Execute();
         }
